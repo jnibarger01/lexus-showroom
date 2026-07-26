@@ -18,8 +18,12 @@ export interface Vehicle {
   description: string;
   startingPrice: number;
   accentColor: string;
+  modelUrl: string;
+  modelRotation: [number, number, number];
   specs: VehicleSpecs;
 }
+
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export const vehicles: Vehicle[] = [
   {
@@ -31,6 +35,8 @@ export const vehicles: Vehicle[] = [
       "The ES pairs a smooth, quiet ride with sharp styling and an intuitive cabin, making every commute feel like an occasion.",
     startingPrice: 43125,
     accentColor: "#8b1d2c",
+    modelUrl: assetUrl("models/es.glb"),
+    modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.5L 4-Cylinder",
       horsepower: 203,
@@ -50,6 +56,8 @@ export const vehicles: Vehicle[] = [
       "Compact on the outside, spacious within, the NX brings Lexus craftsmanship and available hybrid efficiency to a versatile SUV.",
     startingPrice: 39685,
     accentColor: "#2c2c2e",
+    modelUrl: assetUrl("models/nx.glb"),
+    modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.5L 4-Cylinder Hybrid",
       horsepower: 239,
@@ -69,6 +77,8 @@ export const vehicles: Vehicle[] = [
       "The RX blends a striking silhouette with a whisper-quiet cabin and advanced safety tech, all wrapped in a ride that feels planted at any speed.",
     startingPrice: 48800,
     accentColor: "#8b1d2c",
+    modelUrl: assetUrl("models/rx.glb"),
+    modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.4L Turbo 4-Cylinder",
       horsepower: 275,
@@ -88,6 +98,8 @@ export const vehicles: Vehicle[] = [
       "Built on legendary off-road architecture and finished with premium materials throughout, the LX is ready for any terrain without sacrificing refinement.",
     startingPrice: 89900,
     accentColor: "#1a1a1a",
+    modelUrl: assetUrl("models/lx.glb"),
+    modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "3.4L Twin-Turbo V6",
       horsepower: 409,
