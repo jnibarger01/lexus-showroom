@@ -10,4 +10,22 @@
   body {
     @apply bg-lexus-black text-white antialiased;
   }
+
+  ::selection {
+    @apply bg-lexus-accent text-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }

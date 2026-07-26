@@ -15,7 +15,7 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a
           href="#home"
-          className="text-xl font-bold tracking-[0.3em] text-white"
+          className="rounded text-xl font-bold tracking-[0.3em] text-white outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-lexus-black"
         >
           LEXUS
         </a>
@@ -25,7 +25,7 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium uppercase tracking-wide text-lexus-silver transition-colors hover:text-white"
+              className="rounded py-1 text-sm font-medium uppercase tracking-wide text-lexus-silver transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
               {link.label}
             </a>
@@ -34,8 +34,9 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="flex flex-col gap-1.5 md:hidden"
-          aria-label="Toggle menu"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:hidden"
+          aria-label="Toggle navigation menu"
+          aria-controls="mobile-navigation"
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen((open) => !open)}
         >
@@ -52,12 +53,12 @@ export default function Navbar() {
       </div>
 
       {isMenuOpen && (
-        <nav className="flex flex-col gap-1 border-t border-white/10 px-6 py-4 md:hidden">
+        <nav id="mobile-navigation" className="flex flex-col gap-1 border-t border-white/10 px-6 py-4 md:hidden">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="rounded px-2 py-3 text-sm font-medium uppercase tracking-wide text-lexus-silver hover:bg-white/5 hover:text-white"
+              className="rounded px-2 py-3 text-sm font-medium uppercase tracking-wide text-lexus-silver hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               onClick={() => setIsMenuOpen(false)}
             >
               {link.label}
