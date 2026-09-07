@@ -1,6 +1,6 @@
 # Lexus Showroom
 
-An independent editorial Lexus lineup concept with embedded model photography and responsive model detail panels.
+An independent editorial Lexus lineup concept with embedded model photography and responsive model detail panels. The portable `index.html` is the production entry point; the repository also retains the Vite/TypeScript toolchain for native build validation.
 
 ## Run locally
 
@@ -11,6 +11,16 @@ python3 -m http.server 8080
 ```
 
 Then visit `http://localhost:8080`.
+
+For repository-native validation, install Node.js 20+ dependencies and run:
+
+```bash
+npm ci
+npm run typecheck
+npm run build
+```
+
+The production build is emitted to `dist/` and is the artifact uploaded by the GitHub Pages workflow.
 
 ## Notes
 
