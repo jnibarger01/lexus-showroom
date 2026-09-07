@@ -444,9 +444,9 @@ figure.ph.img-missing img{opacity:0}
 .detail{
   position:fixed; inset:0; z-index:60; overflow-y:auto; overscroll-behavior:contain;
   background:var(--obsidian); color:var(--pearl);
-  visibility:hidden; opacity:0; transition:opacity .32s var(--ease), visibility 0s linear .32s;
+  visibility:hidden; opacity:0; pointer-events:none; transition:opacity .32s var(--ease), visibility 0s linear .32s;
 }
-.detail:target, .detail.open{visibility:visible; opacity:1; transition:opacity .32s var(--ease)}
+.detail:target, .detail.open{visibility:visible; opacity:1; pointer-events:auto; transition:opacity .32s var(--ease)}
 @media (prefers-reduced-motion:reduce){ .detail{transition:none} }
 .detail-top{
   position:sticky; top:0; z-index:5; display:flex; justify-content:space-between; align-items:center;
