@@ -444,9 +444,10 @@ figure.ph.img-missing img{opacity:0}
 .detail{
   position:fixed; inset:0; z-index:60; overflow-y:auto; overscroll-behavior:contain;
   background:var(--obsidian); color:var(--pearl);
-  visibility:hidden; opacity:0; pointer-events:none; transition:opacity .32s var(--ease), visibility 0s linear .32s;
+  visibility:hidden; opacity:0; pointer-events:none; transition:opacity .32s var(--ease);
 }
-.detail:target, .detail.open{visibility:visible; opacity:1; pointer-events:auto; transition:opacity .32s var(--ease)}
+.detail:target, .detail.open{visibility:visible; opacity:1; pointer-events:auto}
+.detail.closing{visibility:visible; opacity:0; pointer-events:none}
 @media (prefers-reduced-motion:reduce){ .detail{transition:none} }
 .detail-top{
   position:sticky; top:0; z-index:5; display:flex; justify-content:space-between; align-items:center;
@@ -1867,14 +1868,18 @@ const LEXUS_MODELS = {
 
   /* ---------- model detail panels ---------- */
   let opener = null;
+  let closingTimer = null;
   const detailIds = Object.keys(LEXUS_MODELS);
+  const closeDelay = reduceMotion ? 0 : 320;
 
   function detailFor(id){ return doc.getElementById(id); }
 
   function openDetail(id, push){
     const d = detailFor(id);
     if (!d) return;
+    if (closingTimer){ clearTimeout(closingTimer); closingTimer = null; }
     detailIds.forEach(x => { const o = detailFor(x); if (o && o !== d) o.classList.remove("open"); });
+    d.classList.remove("closing");
     d.classList.add("open");
     body.classList.add("detail-open");
     if (push && "#" + id !== location.hash){
@@ -1886,12 +1891,26 @@ const LEXUS_MODELS = {
 
   function closeDetail(returnHash){
     let wasOpen = false;
-    detailIds.forEach(x => { const o = detailFor(x); if (o && o.classList.contains("open")){ o.classList.remove("open"); wasOpen = true; } });
+    detailIds.forEach(x => {
+      const o = detailFor(x);
+      if (o && o.classList.contains("open")){
+        o.classList.remove("open");
+        o.classList.add("closing");
+        wasOpen = true;
+      }
+    });
     body.classList.remove("detail-open");
     if (wasOpen && detailIds.includes(location.hash.slice(1))){
       try { history.pushState(null, "", returnHash || "#lineup"); } catch(_){}
     }
     if (opener){ opener.focus({ preventScroll:true }); opener = null; }
+    if (wasOpen){
+      if (closingTimer) clearTimeout(closingTimer);
+      closingTimer = setTimeout(() => {
+        detailIds.forEach(x => { const o = detailFor(x); if (o) o.classList.remove("closing"); });
+        closingTimer = null;
+      }, closeDelay);
+    }
   }
 
   doc.addEventListener("click", e => {
