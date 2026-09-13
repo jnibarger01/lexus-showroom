@@ -392,4 +392,3 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
   );
 }
 
-useGLTF.preload(heroModelUrl);

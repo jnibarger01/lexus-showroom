@@ -13,7 +13,7 @@ and LX lineup — built with Vite and Tailwind CSS.
 
 ```
 src/
-  components/   Navbar, Hero, Button, CarCard, SpecTable, Footer
+  components/   Navbar, Hero, Button, CarCard, LazyShowroom3D, SpecTable, Footer
   data/         vehicles.ts — typed vehicle data (edit this to change/add models)
   App.tsx       Page layout wiring the components together
 ```
@@ -25,12 +25,42 @@ refresh models.
 
 ## 3D models
 
-`CarShowroom3D` loads GLBs from `public/models` via `import.meta.env.BASE_URL`
+`LazyShowroom3D` code-splits `CarShowroom3D` (Three.js / React Three Fiber /
+drei) and mounts the WebGL canvas only on intent — the **Load 3D view**
+button — or when the showroom section scrolls near the viewport. That keeps
+the initial JS/CSS path lean and avoids blocking first paint with the 3D
+stack or GLB fetch.
+
+GLBs load from `public/models` via `import.meta.env.BASE_URL`
 (`/lexus-showroom/` on GitHub Pages). Each lineup vehicle maps to
 `models/{id}.glb` (`es`, `nx`, `rx`, `lx`) and falls back to the bundled
 `models/hero.glb`. See `public/models/README.md` for naming and asset rules.
 The viewer shows load progress, a WebGL fallback, and an error state if no
 GLB is available.
+
+## Asset size budgets
+
+| Asset | Budget | Notes |
+| ----- | ------ | ----- |
+| Initial JS (entry + CSS-adjacent chunks, gzip) | ≤ ~180 KB | Hero + lineup + specs; **no** Three/R3F |
+| 3D viewer chunk (lazy, gzip) | ≤ ~450 KB | Loaded only after intent / near-viewport |
+| Shared `hero.glb` | ≤ 200 KB | Bundled placeholder is ~18 KB today |
+| Per-vehicle `.glb` | ≤ 5 MB preferred; hard cap 15 MB | Mobile delivery; prefer Draco/Meshopt |
+| Texture maps | ≤ 2K for most surfaces | 4K only for critical exterior detail |
+
+### Recompressing GLBs (follow-up)
+
+Binary recompression is optional for the current low-poly `hero.glb`. When
+adding licensed models:
+
+```bash
+# Example with gltf-transform (install separately — not a repo dependency)
+npx @gltf-transform/cli optimize public/models/es.glb public/models/es.glb \
+  --compress draco --texture-size 2048
+```
+
+Document the before/after sizes in the PR that adds each asset. Optional
+Lighthouse CI can land later; this repo starts with size notes + lazy load.
 
 ## Local development
 
