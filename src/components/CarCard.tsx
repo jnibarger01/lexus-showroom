@@ -46,8 +46,9 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
         <p className="text-sm leading-6 text-lexus-silver/80">{vehicle.description}</p>
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-lexus-silver/70">Starting at</p>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-lexus-silver/70">Starting at (MSRP + DPH)</p>
             <p className="mt-1 text-lg font-bold text-white">{priceFormatter.format(vehicle.startingPrice)}</p>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-lexus-silver/55">Approx. · 2026 MY entry</p>
           </div>
           <Button variant="secondary" className="shrink-0 px-4 py-2.5 text-xs" onClick={() => onViewSpecs(vehicle.id)}>
             View specs<span className="sr-only"> for {vehicle.name}</span>
