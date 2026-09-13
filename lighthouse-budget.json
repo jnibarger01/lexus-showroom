@@ -1,0 +1,16 @@
+{
+  "$comment": "Pages home under Vite base /lexus-showroom/. Entry JS gzip is the deterministic fail for a huge unused sync script. LCP/TBT are desktop + slightly lenient for shared CI runners (3D stays lazy; do not set impossible first-paint numbers).",
+  "urlPath": "/lexus-showroom/",
+  "previewHost": "127.0.0.1",
+  "previewPort": 4173,
+  "assets": {
+    "entryJsGzipBytes": 184320,
+    "entryCssGzipBytes": 40960
+  },
+  "lighthouse": {
+    "preset": "desktop",
+    "onlyCategories": ["performance"],
+    "lcpMs": 4000,
+    "tbtMs": 600
+  }
+}

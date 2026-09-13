@@ -11,3 +11,7 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Lighthouse budget
+/lighthouse-report.json
+/.lighthouseci/

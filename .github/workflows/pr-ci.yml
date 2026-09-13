@@ -38,3 +38,6 @@ jobs:
 
       - name: Playwright smoke (home + Pages base path)
         run: npm run test:e2e
+
+      - name: Lighthouse budget (Pages home)
+        run: npm run test:perf
