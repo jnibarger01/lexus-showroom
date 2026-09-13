@@ -36,6 +36,11 @@ describe("home page a11y smoke", () => {
         '[role="tablist"][aria-label="Choose a Lexus model"]',
       ),
     ).toBeTruthy();
+    expect(
+      container.querySelector(
+        '[role="radiogroup"][aria-label="Filter lineup by body style"]',
+      ),
+    ).toBeTruthy();
     expect(container.querySelector('[data-testid="print-specs"]')).toBeTruthy();
   });
 
