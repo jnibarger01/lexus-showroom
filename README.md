@@ -18,8 +18,10 @@ src/
   App.tsx       Page layout wiring the components together
 ```
 
-Vehicle data (names, specs, pricing, taglines) currently uses placeholder
-values. Update `src/data/vehicles.ts` to swap in real content.
+Vehicle data in `src/data/vehicles.ts` uses 2026 MY entry-trim specs and
+MSRP + DPH from Lexus USA Newsroom press materials. The UI labels this as
+approximate / demo comparison data — not a dealer quote. Update that file to
+refresh models.
 
 ## Local development
 

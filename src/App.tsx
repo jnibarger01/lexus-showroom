@@ -5,7 +5,7 @@ import CarCard from "./components/CarCard";
 import CarShowroom3D from "./components/CarShowroom3D";
 import SpecTable from "./components/SpecTable";
 import Footer from "./components/Footer";
-import { vehicles } from "./data/vehicles";
+import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 
 function App() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id);
@@ -62,9 +62,11 @@ function App() {
                 model to open its interactive 360-degree view.
               </p>
             </div>
-            <p className="border-l border-lexus-accent pl-4 text-sm leading-6 text-lexus-silver/80 sm:max-w-48">
-              Pricing and specifications shown are for comparison and may vary by
-              configuration.
+            <p className="border-l border-lexus-accent pl-4 text-sm leading-6 text-lexus-silver/80 sm:max-w-xs">
+              <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.16em] text-lexus-accent">
+                Demo / approximate
+              </span>
+              {vehicleDataDisclaimer}
             </p>
           </div>
 
@@ -140,7 +142,8 @@ function App() {
               Specifications
             </h2>
             <p className="mt-4 leading-7 text-lexus-silver">
-              Select a model to explore its key specifications.
+              Select a model to explore its key specifications. Figures reflect
+              2026 MY entry trims and are approximate for comparison.
             </p>
           </div>
 

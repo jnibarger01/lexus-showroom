@@ -25,25 +25,34 @@ export interface Vehicle {
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
+/**
+ * 2026 MY entry-trim headline figures sourced from Lexus USA Newsroom
+ * press releases (MSRP includes Delivery, Processing, and Handling).
+ * Dealer price, packages, and EPA labels may vary — shown for showroom
+ * comparison, not a final quote.
+ */
+export const vehicleDataDisclaimer =
+  "2026 MY entry-trim specs and MSRP + DPH from Lexus USA Newsroom. Approximate for comparison; dealer price and configuration vary.";
+
 export const vehicles: Vehicle[] = [
   {
     id: "es",
     name: "Lexus ES",
     bodyStyle: "Sedan",
-    tagline: "Effortless elegance, refined for the everyday drive.",
+    tagline: "All-electric refinement in the eighth-generation ES.",
     description:
-      "The ES pairs a smooth, quiet ride with sharp styling and an intuitive cabin, making every commute feel like an occasion.",
-    startingPrice: 43125,
+      "The 2026 ES 350e opens the lineup with a whisper-quiet cabin, LSS+ 4.0, and a 307-mile EPA-estimated range — the first battery-electric ES for everyday luxury.",
+    startingPrice: 48895,
     accentColor: "#8b1d2c",
     modelUrl: assetUrl("models/es.glb"),
     modelRotation: [0, Math.PI, 0],
     specs: {
-      engine: "2.5L 4-Cylinder",
-      horsepower: 203,
-      zeroToSixty: "8.1s",
-      mpgCombined: "29 combined",
+      engine: "Single electric motor (74.7-kWh)",
+      horsepower: 221,
+      zeroToSixty: "7.4s",
+      mpgCombined: "307 mi EPA range",
       seating: 5,
-      cargoCapacity: "16.7 cu ft",
+      cargoCapacity: "13.3 cu ft",
       drivetrain: "FWD",
     },
   },
@@ -51,52 +60,52 @@ export const vehicles: Vehicle[] = [
     id: "nx",
     name: "Lexus NX",
     bodyStyle: "Compact SUV",
-    tagline: "Bold proportions built for the modern commute.",
+    tagline: "Compact luxury crossover with hybrid efficiency first.",
     description:
-      "Compact on the outside, spacious within, the NX brings Lexus craftsmanship and available hybrid efficiency to a versatile SUV.",
-    startingPrice: 39685,
+      "The NX 350h FWD leads the compact lineup with a 2.5L hybrid system, up to 40 mpg combined, and Lexus craftsmanship in a versatile five-seat package.",
+    startingPrice: 45570,
     accentColor: "#2c2c2e",
     modelUrl: assetUrl("models/nx.glb"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.5L 4-Cylinder Hybrid",
-      horsepower: 239,
-      zeroToSixty: "7.2s",
-      mpgCombined: "39 combined",
+      horsepower: 240,
+      zeroToSixty: "8.2s",
+      mpgCombined: "40 mpg combined",
       seating: 5,
       cargoCapacity: "22.7 cu ft",
-      drivetrain: "AWD available",
+      drivetrain: "FWD (AWD available)",
     },
   },
   {
     id: "rx",
     name: "Lexus RX",
     bodyStyle: "SUV",
-    tagline: "The original luxury SUV, reimagined for today.",
+    tagline: "The original luxury SUV, tuned for every drive.",
     description:
-      "The RX blends a striking silhouette with a whisper-quiet cabin and advanced safety tech, all wrapped in a ride that feels planted at any speed.",
-    startingPrice: 48800,
+      "The RX 350 pairs a 2.4L turbo four with a quiet GA-K platform cabin, generous cargo space, and available AWD — still the benchmark midsize luxury crossover.",
+    startingPrice: 52775,
     accentColor: "#8b1d2c",
     modelUrl: assetUrl("models/rx.glb"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.4L Turbo 4-Cylinder",
       horsepower: 275,
-      zeroToSixty: "7.3s",
-      mpgCombined: "27 combined",
+      zeroToSixty: "~7.6s",
+      mpgCombined: "25 mpg combined",
       seating: 5,
       cargoCapacity: "29.6 cu ft",
-      drivetrain: "AWD available",
+      drivetrain: "FWD (AWD available)",
     },
   },
   {
     id: "lx",
     name: "Lexus LX",
     bodyStyle: "Full-Size SUV",
-    tagline: "Uncompromising capability, first-class comfort.",
+    tagline: "Flagship capability with first-class comfort.",
     description:
-      "Built on legendary off-road architecture and finished with premium materials throughout, the LX is ready for any terrain without sacrificing refinement.",
-    startingPrice: 89900,
+      "The LX 600 Premium brings a twin-turbo 3.4L V6, full-time 4WD, and up to seven seats — built for serious off-road duty without leaving luxury behind.",
+    startingPrice: 108050,
     accentColor: "#1a1a1a",
     modelUrl: assetUrl("models/lx.glb"),
     modelRotation: [0, Math.PI, 0],
@@ -104,10 +113,10 @@ export const vehicles: Vehicle[] = [
       engine: "3.4L Twin-Turbo V6",
       horsepower: 409,
       zeroToSixty: "6.7s",
-      mpgCombined: "19 combined",
-      seating: 8,
-      cargoCapacity: "40.8 cu ft",
-      drivetrain: "4WD",
+      mpgCombined: "19 mpg combined",
+      seating: 7,
+      cargoCapacity: "44.0 cu ft (2nd row)",
+      drivetrain: "Full-time 4WD",
     },
   },
 ];
