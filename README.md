@@ -50,6 +50,15 @@ This starts a local dev server (Vite will print the URL, typically
 npm run typecheck
 ```
 
+## Accessibility smoke
+
+```bash
+npm run test:a11y
+```
+
+Runs a Vitest + axe-core smoke check on the home page (3D viewer mocked).
+Contrast for brand accent text is handled via the `lexus.accent-bright` theme token.
+
 ## Production build
 
 ```bash

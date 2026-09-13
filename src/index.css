@@ -15,6 +15,14 @@
     @apply bg-lexus-accent text-white;
   }
 
+  /* Visible keyboard focus for native controls not covered by component classes */
+  a:focus-visible,
+  button:focus-visible,
+  [role="tab"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline-offset: 2px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

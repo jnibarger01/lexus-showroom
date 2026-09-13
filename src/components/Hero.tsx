@@ -9,17 +9,27 @@ export default function Hero({ onExploreModels, onCompareSpecs }: HeroProps) {
   return (
     <section
       id="home"
+      aria-labelledby="hero-heading"
       className="relative isolate overflow-hidden border-b border-white/10 bg-lexus-black"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(139,29,44,0.38),transparent_24rem),radial-gradient(circle_at_22%_0%,rgba(255,255,255,0.1),transparent_30rem)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-lexus-black to-transparent" />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_32%,rgba(139,29,44,0.38),transparent_24rem),radial-gradient(circle_at_22%_0%,rgba(255,255,255,0.1),transparent_30rem)]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-lexus-black to-transparent"
+        aria-hidden="true"
+      />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1fr_0.95fr] lg:py-32">
         <div className="max-w-2xl">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent sm:text-sm">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
             The Lexus Showroom
           </p>
-          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
+          <h1
+            id="hero-heading"
+            className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl"
+          >
             Experience amazing,
             <span className="block text-lexus-silver">on your terms.</span>
           </h1>
@@ -28,22 +38,22 @@ export default function Hero({ onExploreModels, onCompareSpecs }: HeroProps) {
             to make the everyday drive feel exceptional.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <Button variant="primary" onClick={onExploreModels}>
+            <Button type="button" variant="primary" onClick={onExploreModels}>
               Explore models
             </Button>
-            <Button variant="ghost" onClick={onCompareSpecs}>
+            <Button type="button" variant="ghost" onClick={onCompareSpecs}>
               Compare specs
             </Button>
           </div>
           <dl className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/15 pt-6 text-sm">
             <div>
-              <dt className="uppercase tracking-[0.18em] text-lexus-silver/65">
+              <dt className="uppercase tracking-[0.18em] text-lexus-silver">
                 Lineup
               </dt>
               <dd className="mt-1 font-semibold text-white">4 distinct models</dd>
             </div>
             <div>
-              <dt className="uppercase tracking-[0.18em] text-lexus-silver/65">
+              <dt className="uppercase tracking-[0.18em] text-lexus-silver">
                 Crafted for
               </dt>
               <dd className="mt-1 font-semibold text-white">Every kind of drive</dd>

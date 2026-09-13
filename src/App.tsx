@@ -48,7 +48,7 @@ function App() {
         >
           <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-12 sm:flex-row sm:items-end">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent sm:text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
                 The lineup
               </p>
               <h2
@@ -62,8 +62,8 @@ function App() {
                 model to open its interactive 360-degree view.
               </p>
             </div>
-            <p className="border-l border-lexus-accent pl-4 text-sm leading-6 text-lexus-silver/80 sm:max-w-xs">
-              <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.16em] text-lexus-accent">
+            <p className="border-l border-lexus-accent pl-4 text-sm leading-6 text-lexus-silver sm:max-w-xs">
+              <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.16em] text-lexus-accent-bright">
                 Demo / approximate
               </span>
               {vehicleDataDisclaimer}
@@ -88,7 +88,7 @@ function App() {
           className="mx-auto max-w-6xl px-6 pb-20 sm:pb-28"
         >
           <div className="mb-8 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent sm:text-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
               360 showroom
             </p>
             <h2
@@ -130,7 +130,7 @@ function App() {
           className="mx-auto max-w-6xl px-6 pb-20 sm:pb-28"
         >
           <div className="mb-10 max-w-2xl sm:mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent sm:text-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
               Compare
             </p>
             <h2

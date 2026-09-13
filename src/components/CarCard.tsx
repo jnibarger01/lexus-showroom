@@ -14,12 +14,19 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardProps) {
+  const titleId = `car-card-title-${vehicle.id}`;
+
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-2xl border bg-lexus-charcoal transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/30 ${
+      aria-labelledby={titleId}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-lexus-charcoal transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/30 ${
         isSelected ? "border-lexus-accent" : "border-white/10 hover:border-white/25"
       }`}
     >
+      {isSelected && (
+        <span className="sr-only">Currently selected in the showroom</span>
+      )}
+
       <div
         className="relative flex h-44 items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${vehicle.accentColor}70, #1a1a1a 68%)` }}
@@ -34,24 +41,45 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
           <circle cx="53" cy="72" r="13" fill="#0b0b0b" /><circle cx="53" cy="72" r="6" fill="#a1a1aa" />
           <circle cx="151" cy="72" r="13" fill="#0b0b0b" /><circle cx="151" cy="72" r="6" fill="#a1a1aa" />
         </svg>
-        {isSelected && <span className="absolute left-4 top-4 rounded-full bg-lexus-black/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">Selected</span>}
       </div>
+
+      {isSelected && (
+        <span className="absolute left-4 top-4 rounded-full bg-lexus-black/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+          Selected
+        </span>
+      )}
 
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lexus-accent">{vehicle.bodyStyle}</p>
-          <h3 className="mt-2 text-2xl font-bold tracking-tight text-white">{vehicle.name}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lexus-accent-bright">
+            {vehicle.bodyStyle}
+          </p>
+          <h3 id={titleId} className="mt-2 text-2xl font-bold tracking-tight text-white">
+            {vehicle.name}
+          </h3>
           <p className="mt-2 text-sm leading-6 text-lexus-silver">{vehicle.tagline}</p>
         </div>
-        <p className="text-sm leading-6 text-lexus-silver/80">{vehicle.description}</p>
+        <p className="text-sm leading-6 text-lexus-silver">{vehicle.description}</p>
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-lexus-silver/70">Starting at (MSRP + DPH)</p>
-            <p className="mt-1 text-lg font-bold text-white">{priceFormatter.format(vehicle.startingPrice)}</p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-lexus-silver/55">Approx. · 2026 MY entry</p>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-lexus-silver">
+              Starting at (MSRP + DPH)
+            </p>
+            <p className="mt-1 text-lg font-bold text-white">
+              {priceFormatter.format(vehicle.startingPrice)}
+            </p>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-lexus-silver">
+              Approx. · 2026 MY entry
+            </p>
           </div>
-          <Button variant="secondary" className="shrink-0 px-4 py-2.5 text-xs" onClick={() => onViewSpecs(vehicle.id)}>
-            View specs<span className="sr-only"> for {vehicle.name}</span>
+          <Button
+            type="button"
+            variant="secondary"
+            className="shrink-0 px-4 py-2.5 text-xs"
+            onClick={() => onViewSpecs(vehicle.id)}
+          >
+            View specs
+            <span className="sr-only"> for {vehicle.name}</span>
           </Button>
         </div>
       </div>
