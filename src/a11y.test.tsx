@@ -19,7 +19,9 @@ describe("home page a11y smoke", () => {
   it("exposes landmarks, skip link, and labeled controls", () => {
     const { container } = render(<App />);
 
-    expect(container.querySelector('a[href="#main-content"]')).toBeTruthy();
+    const skip = container.querySelector('a.skip-link[href="#main-content"]');
+    expect(skip).toBeTruthy();
+    expect(skip?.textContent).toMatch(/skip to content/i);
     expect(container.querySelector("main#main-content")).toBeTruthy();
     expect(container.querySelector('nav[aria-label="Primary"]')).toBeTruthy();
     expect(container.querySelector("header")).toBeTruthy();

@@ -47,6 +47,16 @@
     @apply bg-accent text-white;
   }
 
+  /* Skip link: visually hidden until keyboard focus, then fixed over chrome */
+  .skip-link:focus {
+    clip: auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    white-space: normal;
+  }
+
   /* Visible keyboard focus for native controls not covered by component classes */
   a:focus-visible,
   button:focus-visible,

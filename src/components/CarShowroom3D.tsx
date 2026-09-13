@@ -7,6 +7,7 @@ import {
   type ErrorInfo,
   type ReactNode,
 } from "react";
+import { usePrefersReducedMotion } from "../prefersReducedMotion";
 import { Canvas } from "@react-three/fiber";
 import {
   Bounds,
@@ -254,6 +255,7 @@ function CarModel({ url, rotation }: { url: string; rotation: Vehicle["modelRota
 
 export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
   const [webgl] = useState(detectWebGL);
+  const reducedMotion = usePrefersReducedMotion();
   const resolved = useResolvedModelUrl(vehicle.modelUrl, heroModelUrl);
 
   useEffect(() => {
@@ -374,7 +376,11 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
             <OrbitControls
               makeDefault
               enablePan={false}
-              enableDamping
+              // Auto-orbit + inertial damping are the vestibular offenders; pause both
+              // when the OS asks for reduced motion so the canvas stays static until drag.
+              autoRotate={!reducedMotion}
+              autoRotateSpeed={0.45}
+              enableDamping={!reducedMotion}
               dampingFactor={0.08}
               rotateSpeed={0.85}
               minDistance={3}
