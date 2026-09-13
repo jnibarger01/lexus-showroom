@@ -59,6 +59,28 @@ npm run test:a11y
 Runs a Vitest + axe-core smoke check on the home page (3D viewer mocked).
 Contrast for brand accent text is handled via the `lexus.accent-bright` theme token.
 
+## Playwright smoke (Pages base path)
+
+CI runs a Chromium smoke against the **production preview** served under
+`base: /lexus-showroom/` so a broken Vite base or missing entry JS/CSS fails
+the PR job.
+
+```bash
+npm run build
+npx playwright install chromium   # once per machine / after Playwright upgrades
+npm run test:e2e
+```
+
+Refresh notes:
+
+- If the repo (and Pages subpath) is renamed, update `base` in
+  `vite.config.ts` **and** the `BASE` constant in `e2e/home-smoke.spec.ts`
+  plus `playwright.config.ts` to match.
+- After bumping `@playwright/test`, re-run `npx playwright install chromium`
+  (CI uses `npx playwright install --with-deps chromium`).
+- Spec lives in `e2e/home-smoke.spec.ts`; extend there for extra critical
+  selectors — keep it a smoke, not a full suite.
+
 ## Production build
 
 ```bash
