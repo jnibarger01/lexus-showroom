@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import CarCard from "./components/CarCard";
-import CarShowroom3D from "./components/CarShowroom3D";
+import LazyShowroom3D from "./components/LazyShowroom3D";
 import SpecTable from "./components/SpecTable";
 import Footer from "./components/Footer";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
@@ -164,7 +164,7 @@ function App() {
             ))}
           </div>
 
-          <CarShowroom3D vehicle={selectedVehicle} />
+          <LazyShowroom3D vehicle={selectedVehicle} />
         </section>
 
         <section

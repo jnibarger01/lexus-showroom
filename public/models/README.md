@@ -31,10 +31,11 @@ are available. Re-run the script to regenerate the placeholder.
 
 - Use only models you own or are licensed to publish.
 - Prefer binary `.glb` with embedded textures.
-- Keep each model under roughly 15 MB for mobile delivery; use Draco or Meshopt compression where practical.
+- **Size budgets:** prefer ≤ 5 MB per vehicle GLB (hard cap ~15 MB); shared `hero.glb` ≤ 200 KB. See root `README.md` → Asset size budgets.
+- Use Draco or Meshopt compression where practical (`@gltf-transform/cli optimize … --compress draco`). Heavy recompression tooling is a follow-up when licensed assets land — the bundled hero is already tiny.
 - Use physically based materials (`metalness`, `roughness`, normal maps, and clearcoat where appropriate).
 - Set real-world scale, center the vehicle near the origin, place the tires on the ground plane, and orient the front toward positive Z before export.
 - Limit texture resolution to 2K for most surfaces; reserve 4K only for visibly important exterior details.
 - Remove hidden geometry, unused materials, cameras, lights, and animation tracks unless the showroom needs them.
 
-The React Three Fiber viewer applies HDRI image-based lighting, ACES tone mapping, shadows, orbit controls, and environment-map intensity tuning at runtime. It also surfaces loading progress, a WebGL-unsupported fallback, and an error state if every candidate GLB is missing.
+The React Three Fiber viewer is **lazy-mounted** (`LazyShowroom3D`) so the GLB and Three.js chunk are not on the first-paint path. At runtime it applies HDRI image-based lighting, ACES tone mapping, shadows, orbit controls, and environment-map intensity tuning. It also surfaces loading progress, a WebGL-unsupported fallback, and an error state if every candidate GLB is missing.
