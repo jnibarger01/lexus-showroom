@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import CarCard from "./components/CarCard";
@@ -6,24 +6,67 @@ import CarShowroom3D from "./components/CarShowroom3D";
 import SpecTable from "./components/SpecTable";
 import Footer from "./components/Footer";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
+import {
+  applyPageMeta,
+  buildPageMeta,
+  vehicleIdFromLocation,
+} from "./seo";
+
+const VEHICLE_IDS = vehicles.map((vehicle) => vehicle.id);
+
+function metaForVehicleId(vehicleId: string | undefined) {
+  return buildPageMeta({
+    vehicleId,
+    origin: window.location.origin,
+    basePath: import.meta.env.BASE_URL,
+  });
+}
 
 function App() {
-  const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(() => {
+    if (typeof window === "undefined") return vehicles[0].id;
+    return vehicleIdFromLocation(window.location, VEHICLE_IDS) ?? vehicles[0].id;
+  });
   const specsHeadingRef = useRef<HTMLHeadingElement>(null);
   const selectedVehicle =
     vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0];
+
+  useEffect(() => {
+    const syncMetaFromLocation = () => {
+      const fromLocation = vehicleIdFromLocation(window.location, VEHICLE_IDS);
+      if (fromLocation) setSelectedVehicleId(fromLocation);
+      applyPageMeta(metaForVehicleId(fromLocation));
+    };
+    syncMetaFromLocation();
+    window.addEventListener("hashchange", syncMetaFromLocation);
+    window.addEventListener("popstate", syncMetaFromLocation);
+    return () => {
+      window.removeEventListener("hashchange", syncMetaFromLocation);
+      window.removeEventListener("popstate", syncMetaFromLocation);
+    };
+  }, []);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleViewSpecs = (vehicleId: string) => {
+  const selectVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId);
+    const next = `${window.location.pathname}${window.location.search}#${vehicleId}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (current !== next) {
+      window.history.replaceState(null, "", next);
+    }
+    applyPageMeta(metaForVehicleId(vehicleId));
+  };
+
+  const handleViewSpecs = (vehicleId: string) => {
+    selectVehicle(vehicleId);
     scrollTo("showroom");
   };
 
   const handleSelectVehicle = (vehicleId: string) => {
-    setSelectedVehicleId(vehicleId);
+    selectVehicle(vehicleId);
   };
 
   return (
