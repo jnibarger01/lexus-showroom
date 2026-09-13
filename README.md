@@ -50,8 +50,9 @@ and [`docs/screenshots/theme-dark.png`](docs/screenshots/theme-dark.png).
 
 ```
 src/
-  components/   Navbar, Hero, Button, CarCard, LazyShowroom3D, SpecTable, Footer
+  components/   Navbar, Hero, Button, CarCard, LazyShowroom3D, SpecTable, LeadForm, Footer
   data/         vehicles.ts — typed vehicle data (edit this to change/add models)
+  leadForm.ts   Lead validation + Formspree/mailto submit helpers
   theme.ts      Light/dark preference + class application
   App.tsx       Page layout wiring the components together
 ```
@@ -99,6 +100,32 @@ npx @gltf-transform/cli optimize public/models/es.glb public/models/es.glb \
 
 Document the before/after sizes in the PR that adds each asset. Optional
 Lighthouse CI can land later; this repo starts with size notes + lazy load.
+
+## Lead form (no CRM)
+
+The Contact section (`#contact`) captures name, email, and model interest
+(ES / NX / RX / LX) with client-side validation and success/error messaging.
+
+Configure the sink with a **public** Vite env var (safe to expose in the Pages
+bundle — never put API secrets here):
+
+| Variable | Purpose |
+| -------- | ------- |
+| `VITE_LEAD_ENDPOINT` | HTTPS Formspree-style form URL (e.g. `https://formspree.io/f/xxxx`). When unset, the form opens a pre-filled `mailto:showroom-leads@example.com` instead. A `mailto:` value is also accepted as the recipient. |
+
+Local example:
+
+```bash
+# optional — Formspree (or compatible) public endpoint
+export VITE_LEAD_ENDPOINT="https://formspree.io/f/your-form-id"
+npm run dev
+```
+
+For GitHub Pages builds, set `VITE_LEAD_ENDPOINT` as a repository Actions
+variable/secret that is passed into the build step if you want the HTTPS sink
+in production; otherwise the mailto fallback is used.
+
+Helpers live in `src/leadForm.ts` (unit-tested). The UI is `src/components/LeadForm.tsx`.
 
 ## Local development
 

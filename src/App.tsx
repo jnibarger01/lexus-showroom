@@ -5,6 +5,7 @@ import CarCard from "./components/CarCard";
 import LazyShowroom3D from "./components/LazyShowroom3D";
 import SpecTable from "./components/SpecTable";
 import CompareTable from "./components/CompareTable";
+import LeadForm from "./components/LeadForm";
 import Footer from "./components/Footer";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
@@ -328,6 +329,7 @@ function App() {
             onChangeRight={handleCompareRight}
           />
         </section>
+        <LeadForm />
       </main>
       <Footer />
     </div>
