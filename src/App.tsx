@@ -73,7 +73,7 @@ function App() {
     <div className="min-h-screen overflow-x-hidden">
       <a
         href="#main-content"
-        className="sr-only z-[60] rounded bg-white px-4 py-2 font-semibold text-lexus-black focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-[60] rounded bg-ink px-4 py-2 font-semibold text-canvas focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Skip to content
       </a>
@@ -87,26 +87,26 @@ function App() {
         <section
           id="models"
           aria-labelledby="models-heading"
-          className="mx-auto max-w-6xl px-6 py-20 sm:py-28"
+          className="mx-auto max-w-6xl px-gutter py-section sm:py-section-lg"
         >
           <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-12 sm:flex-row sm:items-end">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
+              <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
                 The lineup
               </p>
               <h2
                 id="models-heading"
-                className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl"
+                className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
               >
                 Find your Lexus
               </h2>
-              <p className="mt-4 leading-7 text-lexus-silver">
+              <p className="mt-4 leading-7 text-muted">
                 Four distinct vehicles, one standard of craftsmanship. Choose a
                 model to open its interactive 360-degree view.
               </p>
             </div>
-            <p className="border-l border-lexus-accent pl-4 text-sm leading-6 text-lexus-silver sm:max-w-xs">
-              <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.16em] text-lexus-accent-bright">
+            <p className="border-l border-accent pl-4 text-sm leading-6 text-muted sm:max-w-xs">
+              <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.16em] text-accent-bright">
                 Demo / approximate
               </span>
               {vehicleDataDisclaimer}
@@ -128,19 +128,19 @@ function App() {
         <section
           id="showroom"
           aria-labelledby="showroom-heading"
-          className="mx-auto max-w-6xl px-6 pb-20 sm:pb-28"
+          className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
         >
           <div className="mb-8 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
+            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
               360 showroom
             </p>
             <h2
               id="showroom-heading"
-              className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl"
+              className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
             >
               Explore every angle
             </h2>
-            <p className="mt-4 leading-7 text-lexus-silver">
+            <p className="mt-4 leading-7 text-muted">
               The viewer uses Three.js through React Three Fiber, physically based
               materials, real-time shadows, and HDRI image-based lighting.
             </p>
@@ -153,10 +153,10 @@ function App() {
                 type="button"
                 onClick={() => handleSelectVehicle(vehicle.id)}
                 aria-pressed={vehicle.id === selectedVehicleId}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-lexus-accent focus-visible:ring-offset-2 focus-visible:ring-offset-lexus-black ${
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ${
                   vehicle.id === selectedVehicleId
-                    ? "border-lexus-accent bg-lexus-accent text-white"
-                    : "border-white/15 bg-white/5 text-lexus-silver hover:border-white/35 hover:text-white"
+                    ? "border-accent bg-accent text-white"
+                    : "border-line/15 bg-ink/5 text-muted hover:border-line/35 hover:text-ink"
                 }`}
               >
                 {vehicle.name.replace("Lexus ", "")}
@@ -170,21 +170,21 @@ function App() {
         <section
           id="specs"
           aria-labelledby="specs-heading"
-          className="mx-auto max-w-6xl px-6 pb-20 sm:pb-28"
+          className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
         >
           <div className="mb-10 max-w-2xl sm:mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-lexus-accent-bright sm:text-sm">
+            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
               Compare
             </p>
             <h2
               id="specs-heading"
               ref={specsHeadingRef}
               tabIndex={-1}
-              className="mt-3 text-3xl font-bold tracking-tight text-white outline-none sm:text-4xl"
+              className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
             >
               Specifications
             </h2>
-            <p className="mt-4 leading-7 text-lexus-silver">
+            <p className="mt-4 leading-7 text-muted">
               Select a model to explore its key specifications. Figures reflect
               2026 MY entry trims and are approximate for comparison.
             </p>

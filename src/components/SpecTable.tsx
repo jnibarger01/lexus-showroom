@@ -65,8 +65,8 @@ export default function SpecTable({
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-lexus-charcoal shadow-2xl shadow-black/20">
-      <div className="border-b border-white/10 p-4 sm:p-5">
+    <div className="overflow-hidden rounded-2xl border border-line/10 bg-surface shadow-2xl shadow-graphite/20">
+      <div className="border-b border-line/10 p-4 sm:p-5">
         <div className="relative">
           <div
             role="tablist"
@@ -89,10 +89,10 @@ export default function SpecTable({
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => onSelectVehicle(vehicle.id)}
                   onKeyDown={(event) => onTabKeyDown(event, index)}
-                  className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
+                  className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
                     isActive
-                      ? "bg-lexus-accent text-white"
-                      : "bg-white/5 text-lexus-silver hover:bg-white/10 hover:text-white"
+                      ? "bg-accent text-white"
+                      : "bg-ink/5 text-muted hover:bg-ink/10 hover:text-ink"
                   }`}
                 >
                   {vehicle.name.replace("Lexus ", "")}
@@ -103,10 +103,10 @@ export default function SpecTable({
           {/* Scroll affordance: edge fade hints more tabs off-screen on narrow viewports */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-lexus-charcoal to-transparent sm:hidden"
+            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-surface to-transparent sm:hidden"
           />
         </div>
-        <p className="mt-2 text-[11px] text-lexus-silver sm:hidden">
+        <p className="mt-2 text-[11px] text-muted sm:hidden">
           Swipe tabs to compare models
         </p>
       </div>
@@ -116,35 +116,35 @@ export default function SpecTable({
         role="tabpanel"
         aria-labelledby={`tab-${selectedVehicle.id}`}
         tabIndex={0}
-        className="min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+        className="min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
       >
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-5 sm:px-8">
+        <div className="flex items-center justify-between gap-4 border-b border-line/10 px-4 py-5 sm:px-8">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lexus-accent-bright">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-bright">
               {selectedVehicle.bodyStyle}
             </p>
-            <h3 className="mt-1 break-words text-2xl font-bold tracking-tight text-white">
+            <h3 className="mt-1 break-words text-2xl font-bold tracking-tight text-ink">
               {selectedVehicle.name}
             </h3>
           </div>
-          <p className="hidden max-w-xs shrink-0 text-right text-sm leading-5 text-lexus-silver sm:block">
+          <p className="hidden max-w-xs shrink-0 text-right text-sm leading-5 text-muted sm:block">
             {selectedVehicle.tagline}
           </p>
         </div>
 
         {/* Mobile: stacked cards — no page-level horizontal overflow */}
-        <dl className="divide-y divide-white/10 sm:hidden">
+        <dl className="divide-y divide-line/10 sm:hidden">
           {SPEC_ROWS.map((row, index) => (
             <div
               key={row.label}
               className={`flex items-baseline justify-between gap-4 px-4 py-3.5 ${
-                index % 2 === 0 ? "bg-white/[0.035]" : ""
+                index % 2 === 0 ? "bg-ink/[0.035]" : ""
               }`}
             >
-              <dt className="shrink-0 text-[11px] font-medium uppercase tracking-[0.12em] text-lexus-silver">
+              <dt className="shrink-0 text-[11px] font-medium uppercase tracking-[0.12em] text-muted">
                 {row.label}
               </dt>
-              <dd className="min-w-0 break-words text-right text-sm font-semibold text-white">
+              <dd className="min-w-0 break-words text-right text-sm font-semibold text-ink">
                 {row.getValue(selectedVehicle)}
               </dd>
             </div>
@@ -161,15 +161,15 @@ export default function SpecTable({
               {SPEC_ROWS.map((row, index) => (
                 <tr
                   key={row.label}
-                  className={index % 2 === 0 ? "bg-white/[0.035]" : undefined}
+                  className={index % 2 === 0 ? "bg-ink/[0.035]" : undefined}
                 >
                   <th
                     scope="row"
-                    className="w-1/3 px-8 py-4 text-sm font-medium uppercase tracking-[0.12em] text-lexus-silver"
+                    className="w-1/3 px-8 py-4 text-sm font-medium uppercase tracking-[0.12em] text-muted"
                   >
                     {row.label}
                   </th>
-                  <td className="px-8 py-4 text-base font-semibold text-white">
+                  <td className="px-8 py-4 text-base font-semibold text-ink">
                     {row.getValue(selectedVehicle)}
                   </td>
                 </tr>

@@ -263,17 +263,17 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
   }, [resolved]);
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#101010] shadow-2xl shadow-black/30">
-      <div className="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+    <div className="overflow-hidden rounded-3xl border border-line/10 bg-surface shadow-2xl shadow-graphite/20">
+      <div className="flex flex-col gap-3 border-b border-line/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-lexus-accent-bright">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent-bright">
             Interactive 3D
           </p>
-          <h3 className="mt-1 text-xl font-bold text-white">{vehicle.name}</h3>
+          <h3 className="mt-1 text-xl font-bold text-ink">{vehicle.name}</h3>
         </div>
-        <div className="min-w-0 text-xs text-lexus-silver">
+        <div className="min-w-0 text-xs text-muted">
           {resolved.usedFallback ? (
-            <p className="mb-1 break-words text-lexus-silver">
+            <p className="mb-1 break-words text-muted">
               Showing shared hero — add{" "}
               <code className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-white/80">
                 public/models/{vehicle.id}.glb
