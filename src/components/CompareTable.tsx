@@ -35,7 +35,7 @@ export default function CompareTable({
       className="overflow-hidden rounded-2xl border border-line/10 bg-surface shadow-2xl shadow-graphite/20"
       data-testid="compare-table"
     >
-      <div className="grid gap-4 border-b border-line/10 p-4 sm:grid-cols-2 sm:gap-6 sm:p-5">
+      <div className="print-hide grid gap-4 border-b border-line/10 p-4 sm:grid-cols-2 sm:gap-6 sm:p-5">
         <label className="flex flex-col gap-2 text-sm">
           <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
             Model A
@@ -73,7 +73,7 @@ export default function CompareTable({
       </div>
 
       {/* Mobile: stacked columns per aligned row */}
-      <div className="sm:hidden" data-testid="compare-mobile">
+      <div className="sm:hidden print:hidden" data-testid="compare-mobile">
         <div className="grid grid-cols-2 gap-px border-b border-line/10 bg-line/10">
           <div className="bg-surface px-4 py-4">
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent-bright">
@@ -117,7 +117,7 @@ export default function CompareTable({
       </div>
 
       {/* Desktop: side-by-side table */}
-      <div className="hidden overflow-x-auto overscroll-x-contain sm:block">
+      <div className="hidden overflow-x-auto overscroll-x-contain sm:block print:block">
         <table className="w-full min-w-[36rem] border-collapse text-left">
           <caption className="sr-only">
             Side-by-side specifications for {left.name} and {right.name}

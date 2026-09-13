@@ -7,6 +7,7 @@ import SpecTable from "./components/SpecTable";
 import CompareTable from "./components/CompareTable";
 import LeadForm from "./components/LeadForm";
 import Footer from "./components/Footer";
+import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
 import {
@@ -271,22 +272,33 @@ function App() {
           aria-labelledby="specs-heading"
           className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
         >
-          <div className="mb-10 max-w-2xl sm:mb-12">
-            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
-              Compare
-            </p>
-            <h2
-              id="specs-heading"
-              ref={specsHeadingRef}
-              tabIndex={-1}
-              className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
+          <div className="mb-10 flex flex-col gap-5 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
+                Compare
+              </p>
+              <h2
+                id="specs-heading"
+                ref={specsHeadingRef}
+                tabIndex={-1}
+                className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
+              >
+                Specifications
+              </h2>
+              <p className="mt-4 leading-7 text-muted">
+                Select a model to explore its key specifications. Figures reflect
+                2026 MY entry trims and are approximate for comparison.
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              className="print-hide shrink-0 self-start sm:self-auto"
+              data-testid="print-specs"
+              onClick={() => window.print()}
             >
-              Specifications
-            </h2>
-            <p className="mt-4 leading-7 text-muted">
-              Select a model to explore its key specifications. Figures reflect
-              2026 MY entry trims and are approximate for comparison.
-            </p>
+              Print specs
+            </Button>
           </div>
 
           <SpecTable

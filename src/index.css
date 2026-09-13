@@ -85,3 +85,61 @@
       );
   }
 }
+
+/* Print: one readable page of specs/MSRP — hide chrome & 3D canvas */
+@media print {
+  @page {
+    margin: 0.6in;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Force readable ink even when theme tokens are dark */
+  :root,
+  :root.light,
+  :root.dark {
+    --color-canvas: 255 255 255;
+    --color-surface: 255 255 255;
+    --color-ink: 17 17 17;
+    --color-muted: 55 55 55;
+    --color-line: 17 17 17;
+    --color-accent: 17 17 17;
+    --color-accent-bright: 17 17 17;
+    --color-champagne: 200 200 200;
+    --color-graphite: 80 80 80;
+  }
+
+  header,
+  footer,
+  #home,
+  #models,
+  #showroom,
+  #contact,
+  a[href="#main-content"],
+  .print-hide {
+    display: none !important;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Compact printable layout */
+  #specs,
+  #compare {
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  #specs .shadow-2xl,
+  #compare .shadow-2xl {
+    box-shadow: none !important;
+  }
+}

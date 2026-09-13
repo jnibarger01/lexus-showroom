@@ -34,6 +34,7 @@ describe("home page a11y smoke", () => {
         '[role="tablist"][aria-label="Choose a Lexus model"]',
       ),
     ).toBeTruthy();
+    expect(container.querySelector('[data-testid="print-specs"]')).toBeTruthy();
   });
 
   it("clears serious axe findings on the home page", async () => {

@@ -50,7 +50,7 @@ export default function SpecTable({
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line/10 bg-surface shadow-2xl shadow-graphite/20">
-      <div className="border-b border-line/10 p-4 sm:p-5">
+      <div className="print-hide border-b border-line/10 p-4 sm:p-5">
         <div className="relative">
           <div
             role="tablist"
@@ -117,7 +117,7 @@ export default function SpecTable({
         </div>
 
         {/* Mobile: stacked cards — no page-level horizontal overflow */}
-        <dl className="divide-y divide-line/10 sm:hidden">
+        <dl className="divide-y divide-line/10 sm:hidden print:hidden">
           {SPEC_ROWS.map((row, index) => (
             <div
               key={row.label}
@@ -136,7 +136,7 @@ export default function SpecTable({
         </dl>
 
         {/* sm+: classic table (intentional horizontal scroll if needed) */}
-        <div className="hidden overflow-x-auto overscroll-x-contain sm:block">
+        <div className="hidden overflow-x-auto overscroll-x-contain sm:block print:block">
           <table className="w-full min-w-[28rem] border-collapse text-left">
             <caption className="sr-only">
               Specifications for {selectedVehicle.name}
