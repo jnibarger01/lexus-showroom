@@ -19,8 +19,8 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
   return (
     <article
       aria-labelledby={titleId}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-lexus-charcoal transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/30 ${
-        isSelected ? "border-lexus-accent" : "border-white/10 hover:border-white/25"
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-surface transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-graphite/20 ${
+        isSelected ? "border-accent" : "border-line/10 hover:border-line/25"
       }`}
     >
       {isSelected && (
@@ -44,31 +44,31 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
       </div>
 
       {isSelected && (
-        <span className="absolute left-4 top-4 rounded-full bg-lexus-black/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+        <span className="absolute left-4 top-4 rounded-full bg-canvas/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-ink">
           Selected
         </span>
       )}
 
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lexus-accent-bright">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent-bright">
             {vehicle.bodyStyle}
           </p>
-          <h3 id={titleId} className="mt-2 text-2xl font-bold tracking-tight text-white">
+          <h3 id={titleId} className="mt-2 text-2xl font-bold tracking-tight text-ink">
             {vehicle.name}
           </h3>
-          <p className="mt-2 text-sm leading-6 text-lexus-silver">{vehicle.tagline}</p>
+          <p className="mt-2 text-sm leading-6 text-muted">{vehicle.tagline}</p>
         </div>
-        <p className="text-sm leading-6 text-lexus-silver">{vehicle.description}</p>
-        <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-4">
+        <p className="text-sm leading-6 text-muted">{vehicle.description}</p>
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-line/10 pt-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-lexus-silver">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted">
               Starting at (MSRP + DPH)
             </p>
-            <p className="mt-1 text-lg font-bold text-white">
+            <p className="mt-1 text-lg font-bold text-ink">
               {priceFormatter.format(vehicle.startingPrice)}
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-lexus-silver">
+            <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-muted">
               Approx. · 2026 MY entry
             </p>
           </div>

@@ -23,6 +23,9 @@ describe("home page a11y smoke", () => {
     expect(container.querySelector("main#main-content")).toBeTruthy();
     expect(container.querySelector('nav[aria-label="Primary"]')).toBeTruthy();
     expect(container.querySelector("header")).toBeTruthy();
+    expect(
+      container.querySelector('button[aria-label="Switch to light theme"], button[aria-label="Switch to dark theme"]'),
+    ).toBeTruthy();
     expect(container.querySelector("footer#contact")).toBeTruthy();
     expect(container.querySelector("table caption")).toBeTruthy();
     expect(

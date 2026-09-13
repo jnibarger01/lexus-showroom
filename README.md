@@ -9,12 +9,50 @@ and LX lineup — built with Vite and Tailwind CSS.
 - [React](https://react.dev/) + TypeScript
 - [Tailwind CSS](https://tailwindcss.com/) — styling
 
+## Brand theme
+
+Lexus-inspired tokens only — this project does **not** ship official Lexus
+logos, wordmarks, or other trademarked assets (no license). The palette is an
+original ebony / cream / champagne / graphite feel plus the existing accent
+red.
+
+Tokens live as CSS variables in `src/index.css` (space-separated RGB so
+Tailwind opacity modifiers work) and are mapped in `tailwind.config.js`.
+
+| Token | Role | Light | Dark |
+| ----- | ---- | ----- | ---- |
+| `canvas` | Page background | cream `#f3ede3` | ebony `#0b0b0b` |
+| `surface` | Cards / panels | champagne `#faf6ee` | charcoal `#1a1a1a` |
+| `ink` | Primary text | ebony `#141210` | cream `#f3ede3` |
+| `muted` | Secondary text | graphite `#5a5449` | silver `#c9ccd1` |
+| `line` | Borders | ebony @ 10–25% | white @ 10–25% |
+| `accent` | Fills / selected | `#8b1d2c` | `#8b1d2c` |
+| `accent-bright` | Small accent text | `#8b1d2c` (AA on cream) | `#e06b76` (AA on ebony) |
+
+Type and spacing tokens: `font-sans` / `font-display`, `tracking-brand` /
+`tracking-kicker`, `spacing.gutter` (`1.5rem`), `spacing.section` (`5rem`),
+`spacing.section-lg` (`7rem`). Navbar, Hero, CarCard, and Footer consume these
+semantic tokens so both themes stay aligned.
+
+### Light and dark mode
+
+- **Default** follows `prefers-color-scheme` (dark when unknown).
+- **Navbar toggle** forces light or dark and persists in `localStorage`
+  (`lexus-showroom-theme`).
+- **Class-based:** `html.dark` / `html.light`. An inline script in
+  `index.html` applies the class before first paint to avoid a flash.
+- Helpers: `src/theme.ts`.
+
+Screenshots: [`docs/screenshots/theme-light.png`](docs/screenshots/theme-light.png)
+and [`docs/screenshots/theme-dark.png`](docs/screenshots/theme-dark.png).
+
 ## Project structure
 
 ```
 src/
   components/   Navbar, Hero, Button, CarCard, LazyShowroom3D, SpecTable, Footer
   data/         vehicles.ts — typed vehicle data (edit this to change/add models)
+  theme.ts      Light/dark preference + class application
   App.tsx       Page layout wiring the components together
 ```
 
@@ -87,7 +125,7 @@ npm run test:a11y
 ```
 
 Runs a Vitest + axe-core smoke check on the home page (3D viewer mocked).
-Contrast for brand accent text is handled via the `lexus.accent-bright` theme token.
+Contrast for brand accent text is handled via the `accent-bright` token (darker on cream, brighter on ebony).
 
 ## Playwright smoke (Pages base path)
 

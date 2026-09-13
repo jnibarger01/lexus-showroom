@@ -3,16 +3,48 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Lexus-inspired tokens (not official brand assets).
+   * Channels are space-separated RGB so Tailwind opacity modifiers work
+   * (e.g. bg-canvas/95, border-line/10).
+   */
+  :root,
+  :root.light {
+    color-scheme: light;
+    --color-canvas: 243 237 227; /* cream */
+    --color-surface: 250 246 238; /* champagne */
+    --color-ink: 20 18 16; /* ebony */
+    --color-muted: 90 84 73; /* graphite */
+    --color-line: 20 18 16;
+    --color-accent: 139 29 44;
+    --color-accent-bright: 139 29 44; /* darker on cream for AA */
+    --color-champagne: 228 213 184;
+    --color-graphite: 74 69 60;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --color-canvas: 11 11 11; /* ebony */
+    --color-surface: 26 26 26; /* charcoal */
+    --color-ink: 243 237 227; /* cream */
+    --color-muted: 201 204 209; /* silver */
+    --color-line: 255 255 255;
+    --color-accent: 139 29 44;
+    --color-accent-bright: 224 107 118; /* AA on ebony */
+    --color-champagne: 196 180 154;
+    --color-graphite: 107 104 96;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-lexus-black text-white antialiased;
+    @apply bg-canvas text-ink antialiased;
   }
 
   ::selection {
-    @apply bg-lexus-accent text-white;
+    @apply bg-accent text-white;
   }
 
   /* Visible keyboard focus for native controls not covered by component classes */
@@ -35,5 +67,21 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+@layer components {
+  .hero-glow {
+    background:
+      radial-gradient(
+        circle at 74% 32%,
+        rgb(var(--color-accent) / 0.28),
+        transparent 24rem
+      ),
+      radial-gradient(
+        circle at 22% 0%,
+        rgb(var(--color-champagne) / 0.38),
+        transparent 30rem
+      );
   }
 }
