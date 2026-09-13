@@ -11,6 +11,13 @@ import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
 import {
+  filterFromLocation,
+  filterHash,
+  filterVehicles,
+  type BodyStyleFilterId,
+} from "./bodyStyleFilter";
+import BodyStyleFilter from "./components/BodyStyleFilter";
+import {
   applyPageMeta,
   buildPageMeta,
   vehicleIdFromLocation,
@@ -46,7 +53,12 @@ function App() {
     if (typeof window === "undefined") return ["es", "nx"];
     return compareIdsFromLocation(window.location, VEHICLE_IDS) ?? ["es", "nx"];
   });
+  const [bodyStyleFilter, setBodyStyleFilter] = useState<BodyStyleFilterId>(() => {
+    if (typeof window === "undefined") return "all";
+    return filterFromLocation(window.location) ?? "all";
+  });
   const specsHeadingRef = useRef<HTMLHeadingElement>(null);
+  const lineupVehicles = filterVehicles(vehicles, bodyStyleFilter);
   const selectedVehicle =
     vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0];
 
@@ -69,6 +81,8 @@ function App() {
     const syncFromLocation = (options?: { restoreView?: boolean }) => {
       const compare = compareIdsFromLocation(window.location, VEHICLE_IDS);
       if (compare) setComparePair(compare);
+      const filter = filterFromLocation(window.location);
+      if (filter) setBodyStyleFilter(filter);
       const fromLocation = vehicleIdFromLocation(window.location, VEHICLE_IDS);
       if (fromLocation) {
         setSelectedVehicleId(fromLocation);
@@ -173,6 +187,22 @@ function App() {
     });
   };
 
+  const handleBodyStyleFilter = (filter: BodyStyleFilterId) => {
+    setBodyStyleFilter(filter);
+    const next = `${window.location.pathname}${window.location.search}${filterHash(filter)}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    // Only rewrite when already on models/filter (or empty) so model/compare deep links stay intact.
+    const hashBody = window.location.hash.replace(/^#/, "").toLowerCase();
+    const canRewrite =
+      !hashBody ||
+      hashBody === "home" ||
+      hashBody === "models" ||
+      hashBody.startsWith("filter=");
+    if (canRewrite && current !== next) {
+      window.history.replaceState(null, "", next);
+    }
+  };
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <a
@@ -217,16 +247,31 @@ function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {vehicles.map((vehicle) => (
-              <CarCard
-                key={vehicle.id}
-                vehicle={vehicle}
-                isSelected={vehicle.id === selectedVehicleId}
-                onViewSpecs={handleViewSpecs}
-              />
-            ))}
-          </div>
+          <BodyStyleFilter
+            value={bodyStyleFilter}
+            onChange={handleBodyStyleFilter}
+          />
+
+          {lineupVehicles.length === 0 ? (
+            <p
+              role="status"
+              data-testid="body-style-filter-empty"
+              className="rounded-2xl border border-dashed border-line/20 bg-surface px-6 py-10 text-center text-muted"
+            >
+              No models match this body style. Try All, Sedan, or SUV.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {lineupVehicles.map((vehicle) => (
+                <CarCard
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  isSelected={vehicle.id === selectedVehicleId}
+                  onViewSpecs={handleViewSpecs}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         <section
