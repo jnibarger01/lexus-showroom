@@ -20,6 +20,10 @@ export interface Vehicle {
   accentColor: string;
   /** BASE_URL-prefixed path to the per-vehicle GLB (`models/{id}.glb`). */
   modelUrl: string;
+  /** BASE_URL-prefixed 1x still (`stills/{id}.svg`). */
+  stillSrc: string;
+  /** Density srcset for the still (`1x` + `@2x`). */
+  stillSrcSet: string;
   modelRotation: [number, number, number];
   specs: VehicleSpecs;
 }
@@ -45,6 +49,22 @@ export const VEHICLE_MODEL_FILES = {
   lx: "lx.glb",
 } as const;
 
+/**
+ * Documented filenames under `public/stills`.
+ * Runtime URLs are `{BASE_URL}stills/<file>` (same BASE_URL rules as models).
+ *
+ *   {id}.svg     — 1x card still (640×356)
+ *   {id}@2x.svg  — 2x density still (1280×712)
+ */
+export const VEHICLE_STILL_FILES = {
+  es: { src: "es.svg", src2x: "es@2x.svg" },
+  nx: { src: "nx.svg", src2x: "nx@2x.svg" },
+  rx: { src: "rx.svg", src2x: "rx@2x.svg" },
+  lx: { src: "lx.svg", src2x: "lx@2x.svg" },
+} as const;
+
+export type VehicleStillId = keyof typeof VEHICLE_STILL_FILES;
+
 export const HERO_MODEL_FILE = "hero.glb";
 
 export const heroModelUrl = assetUrl(`models/${HERO_MODEL_FILE}`);
@@ -55,6 +75,24 @@ export function vehicleModelUrl(vehicleId: keyof typeof VEHICLE_MODEL_FILES | st
       ? VEHICLE_MODEL_FILES[vehicleId as keyof typeof VEHICLE_MODEL_FILES]
       : HERO_MODEL_FILE;
   return assetUrl(`models/${file}`);
+}
+
+export function vehicleStillSrc(vehicleId: VehicleStillId | string): string {
+  const files =
+    vehicleId in VEHICLE_STILL_FILES
+      ? VEHICLE_STILL_FILES[vehicleId as VehicleStillId]
+      : VEHICLE_STILL_FILES.es;
+  return assetUrl(`stills/${files.src}`);
+}
+
+export function vehicleStillSrcSet(vehicleId: VehicleStillId | string): string {
+  const files =
+    vehicleId in VEHICLE_STILL_FILES
+      ? VEHICLE_STILL_FILES[vehicleId as VehicleStillId]
+      : VEHICLE_STILL_FILES.es;
+  const oneX = assetUrl(`stills/${files.src}`);
+  const twoX = assetUrl(`stills/${files.src2x}`);
+  return `${oneX} 1x, ${twoX} 2x`;
 }
 
 /**
@@ -77,6 +115,8 @@ export const vehicles: Vehicle[] = [
     startingPrice: 48895,
     accentColor: "#8b1d2c",
     modelUrl: vehicleModelUrl("es"),
+    stillSrc: vehicleStillSrc("es"),
+    stillSrcSet: vehicleStillSrcSet("es"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "Single electric motor (74.7-kWh)",
@@ -98,6 +138,8 @@ export const vehicles: Vehicle[] = [
     startingPrice: 45570,
     accentColor: "#2c2c2e",
     modelUrl: vehicleModelUrl("nx"),
+    stillSrc: vehicleStillSrc("nx"),
+    stillSrcSet: vehicleStillSrcSet("nx"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.5L 4-Cylinder Hybrid",
@@ -119,6 +161,8 @@ export const vehicles: Vehicle[] = [
     startingPrice: 52775,
     accentColor: "#8b1d2c",
     modelUrl: vehicleModelUrl("rx"),
+    stillSrc: vehicleStillSrc("rx"),
+    stillSrcSet: vehicleStillSrcSet("rx"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "2.4L Turbo 4-Cylinder",
@@ -140,6 +184,8 @@ export const vehicles: Vehicle[] = [
     startingPrice: 108050,
     accentColor: "#1a1a1a",
     modelUrl: vehicleModelUrl("lx"),
+    stillSrc: vehicleStillSrc("lx"),
+    stillSrcSet: vehicleStillSrcSet("lx"),
     modelRotation: [0, Math.PI, 0],
     specs: {
       engine: "3.4L Twin-Turbo V6",
