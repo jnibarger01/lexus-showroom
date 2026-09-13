@@ -9,6 +9,19 @@ const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ];
 
+/** Per-model hash routes (Pages-friendly); Back restores the prior entry. */
+const MODEL_LINKS = [
+  { label: "ES", href: "#es" },
+  { label: "NX", href: "#nx" },
+  { label: "RX", href: "#rx" },
+  { label: "LX", href: "#lx" },
+];
+
+interface NavbarProps {
+  /** Home clears a model hash via history so Back from a model returns here. */
+  onNavigateHome?: () => void;
+}
+
 const focusRing =
   "rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink";
 
@@ -48,7 +61,7 @@ function ThemeToggle() {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ onNavigateHome }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Collapse mobile menu when viewport reaches md breakpoint
@@ -89,17 +102,41 @@ export default function Navbar() {
         <a
           href="#home"
           className={`min-w-0 text-lg font-bold tracking-brand text-ink sm:text-xl sm:tracking-[0.3em] ${focusRing}`}
-          onClick={() => setIsMenuOpen(false)}
+          onClick={(event) => {
+            setIsMenuOpen(false);
+            if (onNavigateHome) {
+              event.preventDefault();
+              onNavigateHome();
+            }
+          }}
         >
           LEXUS
         </a>
 
-        <nav aria-label="Primary" className="hidden gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-6 lg:gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               className={`py-1 text-sm font-medium uppercase tracking-wide text-muted transition-colors hover:text-ink ${focusRing}`}
+              onClick={
+                link.href === "#home" && onNavigateHome
+                  ? (event) => {
+                      event.preventDefault();
+                      onNavigateHome();
+                    }
+                  : undefined
+              }
+            >
+              {link.label}
+            </a>
+          ))}
+          <span className="h-4 w-px bg-line/20" aria-hidden="true" />
+          {MODEL_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`py-1 text-sm font-semibold uppercase tracking-wide text-muted transition-colors hover:text-ink ${focusRing}`}
             >
               {link.label}
             </a>
@@ -149,6 +186,25 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={`px-2 py-3 text-sm font-medium uppercase tracking-wide text-muted hover:bg-ink/5 hover:text-ink ${focusRing}`}
+              onClick={(event) => {
+                setIsMenuOpen(false);
+                if (link.href === "#home" && onNavigateHome) {
+                  event.preventDefault();
+                  onNavigateHome();
+                }
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+          <p className="mt-2 px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
+            Models
+          </p>
+          {MODEL_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`px-2 py-3 text-sm font-semibold uppercase tracking-wide text-muted hover:bg-ink/5 hover:text-ink ${focusRing}`}
               onClick={() => setIsMenuOpen(false)}
             >
               {link.label}

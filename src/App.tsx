@@ -16,6 +16,16 @@ import {
 
 const VEHICLE_IDS = vehicles.map((vehicle) => vehicle.id);
 
+function scrollElIntoView(
+  id: string,
+  options?: ScrollIntoViewOptions,
+) {
+  const el = document.getElementById(id);
+  // jsdom (vitest) does not implement scrollIntoView.
+  el?.scrollIntoView?.(options);
+}
+
+
 function metaForVehicleId(vehicleId: string | undefined) {
   return buildPageMeta({
     vehicleId,
@@ -38,43 +48,92 @@ function App() {
     vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0];
 
   useEffect(() => {
-    const syncFromLocation = () => {
+    const focusShowroom = () => {
+      const heading = document.getElementById("showroom-heading");
+      scrollElIntoView("showroom", { behavior: "smooth" });
+      heading?.focus({ preventScroll: true });
+    };
+
+    const focusHome = () => {
+      scrollElIntoView("home", { behavior: "auto" });
+    };
+
+    const sectionHash = () =>
+      window.location.hash.replace(/^#/, "").split(/[/?&]/)[0]?.toLowerCase() ?? "";
+
+    const syncFromLocation = (options?: { restoreView?: boolean }) => {
       const compare = compareIdsFromLocation(window.location, VEHICLE_IDS);
       if (compare) setComparePair(compare);
       const fromLocation = vehicleIdFromLocation(window.location, VEHICLE_IDS);
-      if (fromLocation) setSelectedVehicleId(fromLocation);
+      if (fromLocation) {
+        setSelectedVehicleId(fromLocation);
+        if (options?.restoreView) {
+          // Defer until layout is ready (direct load / navbar hash / back-forward).
+          requestAnimationFrame(() => focusShowroom());
+        }
+      } else if (options?.restoreView) {
+        const hash = sectionHash();
+        // Empty or #home after Back from a model — land on the hero again.
+        if (!hash || hash === "home") {
+          requestAnimationFrame(() => focusHome());
+        }
+      }
       applyPageMeta(metaForVehicleId(fromLocation));
     };
-    syncFromLocation();
-    window.addEventListener("hashchange", syncFromLocation);
-    window.addEventListener("popstate", syncFromLocation);
+
+    // Initial deep link: select + scroll/focus the model showroom.
+    syncFromLocation({ restoreView: true });
+    const onHashOrPop = () => syncFromLocation({ restoreView: true });
+    window.addEventListener("hashchange", onHashOrPop);
+    window.addEventListener("popstate", onHashOrPop);
     return () => {
-      window.removeEventListener("hashchange", syncFromLocation);
-      window.removeEventListener("popstate", syncFromLocation);
+      window.removeEventListener("hashchange", onHashOrPop);
+      window.removeEventListener("popstate", onHashOrPop);
     };
   }, []);
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    scrollElIntoView(id, { behavior: "smooth" });
   };
 
-  const selectVehicle = (vehicleId: string) => {
+  /** Push a model hash so Back returns to the previous route (home/section). */
+  const selectVehicle = (
+    vehicleId: string,
+    historyMode: "push" | "replace" | "none" = "push",
+  ) => {
     setSelectedVehicleId(vehicleId);
-    const next = `${window.location.pathname}${window.location.search}#${vehicleId}`;
-    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    if (current !== next) {
-      window.history.replaceState(null, "", next);
+    if (historyMode !== "none") {
+      const next = `${window.location.pathname}${window.location.search}#${vehicleId}`;
+      const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (current !== next) {
+        if (historyMode === "push") {
+          window.history.pushState(null, "", next);
+        } else {
+          window.history.replaceState(null, "", next);
+        }
+      }
     }
     applyPageMeta(metaForVehicleId(vehicleId));
   };
 
   const handleViewSpecs = (vehicleId: string) => {
-    selectVehicle(vehicleId);
+    selectVehicle(vehicleId, "push");
     scrollTo("showroom");
   };
 
   const handleSelectVehicle = (vehicleId: string) => {
-    selectVehicle(vehicleId);
+    selectVehicle(vehicleId, "push");
+  };
+
+  /** Clear model hash (Home) while preserving a history entry for Back. */
+  const goHome = () => {
+    const next = `${window.location.pathname}${window.location.search}#home`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (current !== next) {
+      window.history.pushState(null, "", next);
+    }
+    applyPageMeta(metaForVehicleId(undefined));
+    scrollTo("home");
   };
 
   const updateCompareHash = (leftId: string, rightId: string) => {
@@ -115,7 +174,7 @@ function App() {
       >
         Skip to content
       </a>
-      <Navbar />
+      <Navbar onNavigateHome={goHome} />
       <main id="main-content">
         <Hero
           onExploreModels={() => scrollTo("models")}
@@ -174,7 +233,8 @@ function App() {
             </p>
             <h2
               id="showroom-heading"
-              className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+              tabIndex={-1}
+              className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
             >
               Explore every angle
             </h2>
