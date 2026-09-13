@@ -15,6 +15,7 @@ import {
   buildPageMeta,
   vehicleIdFromLocation,
 } from "./seo";
+import { prefersReducedMotion } from "./prefersReducedMotion";
 
 const VEHICLE_IDS = vehicles.map((vehicle) => vehicle.id);
 
@@ -52,7 +53,9 @@ function App() {
   useEffect(() => {
     const focusShowroom = () => {
       const heading = document.getElementById("showroom-heading");
-      scrollElIntoView("showroom", { behavior: "smooth" });
+      scrollElIntoView("showroom", {
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
       heading?.focus({ preventScroll: true });
     };
 
@@ -95,7 +98,9 @@ function App() {
   }, []);
 
   const scrollTo = (id: string) => {
-    scrollElIntoView(id, { behavior: "smooth" });
+    scrollElIntoView(id, {
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   };
 
   /** Push a model hash so Back returns to the previous route (home/section). */
@@ -172,7 +177,7 @@ function App() {
     <div className="min-h-screen overflow-x-hidden">
       <a
         href="#main-content"
-        className="sr-only z-[60] rounded bg-ink px-4 py-2 font-semibold text-canvas focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="skip-link sr-only z-[60] rounded bg-ink px-4 py-2 font-semibold text-canvas focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-accent-bright"
       >
         Skip to content
       </a>

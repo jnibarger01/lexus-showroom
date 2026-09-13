@@ -53,6 +53,7 @@ src/
   components/   Navbar, Hero, Button, CarCard, LazyShowroom3D, SpecTable, LeadForm, Footer
   data/         vehicles.ts — typed vehicle data (edit this to change/add models)
   leadForm.ts   Lead validation + Formspree/mailto submit helpers
+  prefersReducedMotion.ts  OS reduced-motion helper + React hook
   theme.ts      Light/dark preference + class application
   App.tsx       Page layout wiring the components together
 ```
@@ -75,7 +76,9 @@ GLBs load from `public/models` via `import.meta.env.BASE_URL`
 `models/{id}.glb` (`es`, `nx`, `rx`, `lx`) and falls back to the bundled
 `models/hero.glb`. See `public/models/README.md` for naming and asset rules.
 The viewer shows load progress, a WebGL fallback, and an error state if no
-GLB is available.
+GLB is available. When the OS has `prefers-reduced-motion: reduce`, auto-orbit
+and control damping pause so the canvas stays still until the user interacts
+(see Accessibility below).
 
 ## Asset size budgets
 
@@ -145,7 +148,10 @@ This starts a local dev server (Vite will print the URL, typically
 npm run typecheck
 ```
 
-## Accessibility smoke
+## Accessibility
+
+- **Skip link:** first focusable control is “Skip to content” (`a.skip-link` → `#main-content`). It stays visually hidden until focused, then appears fixed at the top-left.
+- **`prefers-reduced-motion`:** `src/index.css` collapses CSS transitions/animations and disables smooth scrolling. Programmatic section scrolls in `App` use `behavior: "auto"` when reduced motion is on. The 3D viewer (`CarShowroom3D`) turns off OrbitControls `autoRotate` and inertial `enableDamping` via `usePrefersReducedMotion()` so the canvas stays static until the user drags (there is no GSAP on this site).
 
 ```bash
 npm run test:a11y
@@ -153,6 +159,7 @@ npm run test:a11y
 
 Runs a Vitest + axe-core smoke check on the home page (3D viewer mocked).
 Contrast for brand accent text is handled via the `accent-bright` token (darker on cream, brighter on ebony).
+Unit coverage for the motion helper lives in `src/prefersReducedMotion.test.ts`.
 
 ## Playwright smoke (Pages base path)
 
