@@ -3,6 +3,14 @@
 A React + TypeScript single-page showroom site featuring the Lexus ES, NX, RX,
 and LX lineup — built with Vite and Tailwind CSS.
 
+## Screenshots
+
+| Home (light) | Model route `#rx` (dark) |
+| ------------ | ------------------------ |
+| ![Home](docs/screenshots/home.png) | ![RX model](docs/screenshots/model-rx.png) |
+
+Theme comparison (full-page): [`theme-light.png`](docs/screenshots/theme-light.png) · [`theme-dark.png`](docs/screenshots/theme-dark.png). Regenerate with `node scripts/capture-readme-screenshots.mjs` (and `scripts/capture-theme-screenshots.mjs`) against `npm run preview` on port 4173.
+
 ## Stack
 
 - [Vite](https://vitejs.dev/) — build tool and dev server
@@ -140,16 +148,67 @@ in production; otherwise the mailto fallback is used.
 
 Helpers live in `src/leadForm.ts` (unit-tested). The UI is `src/components/LeadForm.tsx`.
 
-## Local development
 
-Requires Node.js 20+.
+## Contributing
+
+New contributors should be able to add a fifth lineup model from this section alone. Open improvement ideas live on GitHub:
+
+- [Open issues](https://github.com/jnibarger01/lexus-showroom/issues?q=is%3Aissue+is%3Aopen)
+
+### Prerequisites
+
+- **Node.js 20** (LTS used in CI — see `.github/workflows/pr-ci.yml`). Node 20+ works locally.
+- `npm install` once after clone.
+
+### Scripts
+
+| Script | Purpose |
+| ------ | ------- |
+| `npm run dev` | Vite dev server |
+| `npm run build` | Typecheck + production build → `dist/` |
+| `npm run typecheck` | `tsc -b --noEmit` |
+| `npm test` | Vitest unit tests |
+| `npm run test:e2e` | Playwright smoke (build + preview under `/lexus-showroom/`) |
+| `npm run test:perf` | Lighthouse + gzip budget on Pages home |
+
+Also useful: `npm run preview`, `npm run test:a11y`, `npm run test:e2e:ui`.
+
+### Add a fifth vehicle
+
+Catalog entries live in `src/data/vehicles.ts` and are validated by `parseVehicleCatalog` in `src/data/vehicleSchema.ts`. Required fields per vehicle:
+
+| Field | Notes |
+| ----- | ----- |
+| `id` | Unique slug (hash route `#id`, lead form value) |
+| `name` | Display name (also `img` alt) |
+| `bodyStyle` | One of: `Sedan`, `Compact SUV`, `SUV`, `Full-Size SUV` |
+| `tagline`, `description` | Non-empty copy |
+| `startingPrice` | Positive MSRP (+ DPH) number |
+| `accentColor` | CSS color string |
+| `modelUrl` | Prefer `vehicleModelUrl("id")` |
+| `stillSrc` / `stillSrcSet` | Prefer `vehicleStillSrc` / `vehicleStillSrcSet` |
+| `modelRotation` | `[x, y, z]` radians tuple |
+| `specs` | `engine`, `horsepower`, `zeroToSixty`, `mpgCombined`, `seating`, `cargoCapacity`, `drivetrain` |
+
+Steps:
+
+1. **Stills** — add `public/stills/{id}.svg` and `public/stills/{id}@2x.svg` (see `public/stills/README.md` for sizes/budgets). Register them in `VEHICLE_STILL_FILES`.
+2. **Optional GLB** — add `public/models/{id}.glb` and register in `VEHICLE_MODEL_FILES`. If missing, the viewer falls back to `public/models/hero.glb`.
+3. **Catalog** — append a `Vehicle` object to the `vehicles` array in `src/data/vehicles.ts` (copy an existing entry and edit). Keep `id` unique.
+4. **Lead form allow-list** — add the new `id` to `LEAD_MODEL_IDS` in `src/leadForm.ts` (the `<select>` already maps over `vehicles`).
+5. **Navbar** — add `{ label, href: "#id" }` to the model links in `src/components/Navbar.tsx`.
+6. **Verify** — `npm run typecheck && npm test && npm run build`. Optionally `npm run test:e2e` and `npm run test:perf`.
+
+Lineup cards, compare, body-style filters, and `#id` model routes pick up new catalog rows automatically once the steps above are done.
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-This starts a local dev server (Vite will print the URL, typically
+Requires Node.js 20+ (see **Contributing**). Vite prints the URL (typically
 `http://localhost:5173`).
 
 ## Type checking
