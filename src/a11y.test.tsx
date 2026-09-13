@@ -26,7 +26,8 @@ describe("home page a11y smoke", () => {
     expect(
       container.querySelector('button[aria-label="Switch to light theme"], button[aria-label="Switch to dark theme"]'),
     ).toBeTruthy();
-    expect(container.querySelector("footer#contact")).toBeTruthy();
+    expect(container.querySelector("section#contact")).toBeTruthy();
+    expect(container.querySelector("footer")).toBeTruthy();
     expect(container.querySelector("table caption")).toBeTruthy();
     expect(
       container.querySelector(
