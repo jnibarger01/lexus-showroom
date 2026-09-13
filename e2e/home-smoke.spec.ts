@@ -78,6 +78,11 @@ test.describe("home smoke under Pages base path", () => {
     await expect(page.getByText(/interactive 3d/i).first()).toBeVisible();
     await expect(page.locator('[data-testid="lazy-showroom-3d"]')).toBeVisible();
 
+    await page.locator("#specs").scrollIntoViewIfNeeded();
+    await expect(
+      page.getByRole("button", { name: /print specs/i }),
+    ).toBeVisible();
+
     expect(failedAssets, failedAssets.join("\n")).toEqual([]);
   });
 });
