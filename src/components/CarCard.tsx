@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Vehicle } from "../data/vehicles";
 import Button from "./Button";
 
@@ -15,6 +16,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 
 export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardProps) {
   const titleId = `car-card-title-${vehicle.id}`;
+  const [stillFailed, setStillFailed] = useState(false);
 
   return (
     <article
@@ -30,17 +32,36 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
       <div
         className="relative flex h-44 items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${vehicle.accentColor}70, #1a1a1a 68%)` }}
-        aria-hidden="true"
       >
-        <span className="absolute -right-9 -top-10 h-32 w-32 rounded-full border border-white/15" />
-        <svg viewBox="0 0 200 90" className="relative h-24 w-auto transition duration-500 group-hover:scale-105">
-          <path d="M12 59h176v10H12z" fill="white" opacity=".15" />
-          <path d="M18 54c8-14 19-26 38-31 24-6 69-7 91 0 18 6 28 17 35 31l12 5c4 2 6 6 6 11v4H8v-5c0-6 3-10 10-12Z" fill="white" opacity=".9" />
-          <path d="M57 29c18-6 59-6 78 0 9 3 18 12 23 22H35c5-10 12-19 22-22Z" fill="#2c2c2e" />
-          <path d="M18 60h164" stroke={vehicle.accentColor} strokeWidth="4" />
-          <circle cx="53" cy="72" r="13" fill="#0b0b0b" /><circle cx="53" cy="72" r="6" fill="#a1a1aa" />
-          <circle cx="151" cy="72" r="13" fill="#0b0b0b" /><circle cx="151" cy="72" r="6" fill="#a1a1aa" />
-        </svg>
+        {stillFailed ? (
+          <div
+            role="img"
+            aria-label={`${vehicle.name} — image unavailable`}
+            data-testid={`still-fallback-${vehicle.id}`}
+            className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center"
+          >
+            <span className="text-3xl font-bold tracking-tight text-ink/90">
+              {vehicle.name.replace(/^Lexus\s+/i, "")}
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
+              Image unavailable
+            </span>
+          </div>
+        ) : (
+          <img
+            src={vehicle.stillSrc}
+            srcSet={vehicle.stillSrcSet}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            alt={vehicle.name}
+            width={640}
+            height={356}
+            loading="lazy"
+            decoding="async"
+            data-testid={`still-${vehicle.id}`}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            onError={() => setStillFailed(true)}
+          />
+        )}
       </div>
 
       {isSelected && (

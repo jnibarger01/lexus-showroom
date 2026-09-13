@@ -80,6 +80,15 @@ GLB is available. When the OS has `prefers-reduced-motion: reduce`, auto-orbit
 and control damping pause so the canvas stays still until the user interacts
 (see Accessibility below).
 
+## Lineup stills
+
+Each lineup card (`CarCard`) uses a distinct per-model still under
+`public/stills/` with `srcset` (1x + `@2x`) and `alt` from `vehicle.name`.
+Placeholders are original SVG silhouettes / gradient cards — **not** official
+Lexus photos. See `public/stills/README.md` for filenames and budgets. Broken
+URLs swap to a labeled fallback so the card never silently blanks. The
+marketing `Hero` keeps its decorative inline SVG (not a per-model still).
+
 ## Asset size budgets
 
 | Asset | Budget | Notes |
@@ -89,6 +98,7 @@ and control damping pause so the canvas stays still until the user interacts
 | Shared `hero.glb` | ≤ 200 KB | Bundled placeholder is ~18 KB today |
 | Per-vehicle `.glb` | ≤ 5 MB preferred; hard cap 15 MB | Mobile delivery; prefer Draco/Meshopt |
 | Texture maps | ≤ 2K for most surfaces | 4K only for critical exterior detail |
+| Per-model still (1x / 2x) | ≤ 25 KB / ≤ 50 KB | SVG placeholders ~1.7 KB; see `public/stills/` |
 
 ### Recompressing GLBs (follow-up)
 
