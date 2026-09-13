@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
@@ -13,12 +13,45 @@ const focusRing =
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Collapse mobile menu when viewport reaches md breakpoint
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => {
+      if (mq.matches) setIsMenuOpen(false);
+    };
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Escape closes the mobile menu
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMenuOpen]);
+
+  // Prevent background scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMenuOpen]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-lexus-black/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
         <a
           href="#home"
-          className={`text-xl font-bold tracking-[0.3em] text-white ${focusRing}`}
+          className={`min-w-0 text-lg font-bold tracking-[0.28em] text-white sm:text-xl sm:tracking-[0.3em] ${focusRing}`}
+          onClick={() => setIsMenuOpen(false)}
         >
           LEXUS
         </a>
@@ -37,7 +70,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className={`relative flex min-h-11 min-w-11 items-center justify-center md:hidden ${focusRing}`}
+          className={`relative flex min-h-11 min-w-11 shrink-0 items-center justify-center md:hidden ${focusRing}`}
           aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-controls="mobile-navigation"
           aria-expanded={isMenuOpen}
@@ -68,7 +101,7 @@ export default function Navbar() {
         <nav
           id="mobile-navigation"
           aria-label="Mobile"
-          className="flex flex-col gap-1 border-t border-white/10 px-6 py-4 md:hidden"
+          className="flex max-h-[calc(100dvh-4.5rem)] flex-col gap-1 overflow-y-auto border-t border-white/10 px-4 py-4 sm:px-6 md:hidden"
         >
           {NAV_LINKS.map((link) => (
             <a
