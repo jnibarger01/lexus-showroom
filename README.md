@@ -111,8 +111,8 @@ npx @gltf-transform/cli optimize public/models/es.glb public/models/es.glb \
   --compress draco --texture-size 2048
 ```
 
-Document the before/after sizes in the PR that adds each asset. Optional
-Lighthouse CI can land later; this repo starts with size notes + lazy load.
+Document the before/after sizes in the PR that adds each asset. PR CI also
+runs a Lighthouse budget on the Pages home (see below).
 
 ## Lead form (no CRM)
 
@@ -192,6 +192,36 @@ Refresh notes:
   (CI uses `npx playwright install --with-deps chromium`).
 - Spec lives in `e2e/home-smoke.spec.ts`; extend there for extra critical
   selectors — keep it a smoke, not a full suite.
+
+## Lighthouse budget (Pages home)
+
+CI runs one desktop Lighthouse performance pass against the **production
+preview** at `http://127.0.0.1:4173/lexus-showroom/` (same Vite `base` as
+GitHub Pages), plus a gzip size check on the initial (non-lazy) JS/CSS.
+A huge unused **sync** script in the entry bundle fails the JS budget with a
+readable table. The lazy 3D chunk is not part of the initial JS budget.
+
+```bash
+npm run build
+npx playwright install chromium   # once — Lighthouse reuses Playwright Chromium
+npm run test:perf
+```
+
+Budgets live in `lighthouse-budget.json` (edit there if a genuine, documented
+regression needs more headroom):
+
+| Check | Budget | Notes |
+| ----- | ------ | ----- |
+| Entry JS gzip | ≤ 180 KB | Same as the asset table above; **no** Three/R3F |
+| Entry CSS gzip | ≤ 40 KB | Initial stylesheet |
+| LCP | ≤ 4000 ms | Desktop preset; first paint, not the WebGL canvas |
+| TBT | ≤ 600 ms | Slightly lenient for shared CI runners |
+
+`test:perf` starts `vite preview` if nothing is already listening on 4173,
+writes `lighthouse-report.json` (gitignored), and prints PASS/FAIL rows.
+Override the browser with `CHROME_PATH` if you do not have Playwright
+Chromium. The 3D viewer still lazy-loads (#9); this budget does not replace
+that split.
 
 ## Production build
 
