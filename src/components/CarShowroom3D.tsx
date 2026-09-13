@@ -266,14 +266,14 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
     <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#101010] shadow-2xl shadow-black/30">
       <div className="flex flex-col gap-3 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-lexus-accent">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-lexus-accent-bright">
             Interactive 3D
           </p>
           <h3 className="mt-1 text-xl font-bold text-white">{vehicle.name}</h3>
         </div>
-        <div className="text-xs text-lexus-silver/75">
+        <div className="text-xs text-lexus-silver">
           {resolved.usedFallback ? (
-            <p className="mb-1 text-lexus-silver/60">
+            <p className="mb-1 text-lexus-silver">
               Showing shared hero — add{" "}
               <code className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-white/80">
                 public/models/{vehicle.id}.glb
