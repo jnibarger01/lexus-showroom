@@ -9,7 +9,9 @@
     "typecheck": "tsc -b --noEmit",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:a11y": "vitest run src/a11y.test.tsx"
+    "test:a11y": "vitest run src/a11y.test.tsx",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.3",
@@ -19,6 +21,7 @@
     "three": "^0.166.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^20.19.43",
