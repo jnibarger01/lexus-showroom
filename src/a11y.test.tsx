@@ -30,6 +30,17 @@ describe("home page a11y smoke", () => {
     ).toBeTruthy();
     expect(container.querySelector("section#contact")).toBeTruthy();
     expect(container.querySelector("footer")).toBeTruthy();
+    expect(container.querySelector('[data-testid="footer-disclaimer"]')?.textContent).toMatch(
+      /not affiliated/i,
+    );
+    expect(container.querySelector("footer time")?.getAttribute("dateTime")).toMatch(
+      /^\d{4}-\d{2}-\d{2}$/,
+    );
+    expect(
+      container.querySelector(
+        'footer a[href="https://github.com/jnibarger01/lexus-showroom"]',
+      ),
+    ).toBeTruthy();
     expect(container.querySelector("table caption")).toBeTruthy();
     expect(
       container.querySelector(

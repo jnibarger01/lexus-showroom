@@ -83,6 +83,26 @@ test.describe("home smoke under Pages base path", () => {
       page.getByRole("button", { name: /print specs/i }),
     ).toBeVisible();
 
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    const footer = page.getByTestId("site-footer");
+    await expect(footer).toBeVisible();
+    await expect(footer.getByTestId("footer-disclaimer")).toContainText(/not affiliated/i);
+    await expect(footer.getByRole("link", { name: /view source on github/i })).toBeVisible();
+
     expect(failedAssets, failedAssets.join("\n")).toEqual([]);
+  });
+
+  test("footer disclaimer visible on a mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(BASE);
+    const footer = page.getByTestId("site-footer");
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+    await expect(footer.getByTestId("footer-disclaimer")).toContainText(
+      /unofficial demo/i,
+    );
+    await expect(
+      footer.getByRole("link", { name: /view source on github/i }),
+    ).toBeVisible();
   });
 });
