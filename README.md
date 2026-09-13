@@ -23,6 +23,15 @@ MSRP + DPH from Lexus USA Newsroom press materials. The UI labels this as
 approximate / demo comparison data — not a dealer quote. Update that file to
 refresh models.
 
+## 3D models
+
+`CarShowroom3D` loads GLBs from `public/models` via `import.meta.env.BASE_URL`
+(`/lexus-showroom/` on GitHub Pages). Each lineup vehicle maps to
+`models/{id}.glb` (`es`, `nx`, `rx`, `lx`) and falls back to the bundled
+`models/hero.glb`. See `public/models/README.md` for naming and asset rules.
+The viewer shows load progress, a WebGL fallback, and an error state if no
+GLB is available.
+
 ## Local development
 
 Requires Node.js 20+.
