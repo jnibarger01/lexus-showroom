@@ -264,16 +264,16 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
 
   return (
     <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#101010] shadow-2xl shadow-black/30">
-      <div className="flex flex-col gap-3 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-lexus-accent-bright">
             Interactive 3D
           </p>
           <h3 className="mt-1 text-xl font-bold text-white">{vehicle.name}</h3>
         </div>
-        <div className="text-xs text-lexus-silver">
+        <div className="min-w-0 text-xs text-lexus-silver">
           {resolved.usedFallback ? (
-            <p className="mb-1 text-lexus-silver">
+            <p className="mb-1 break-words text-lexus-silver">
               Showing shared hero — add{" "}
               <code className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-white/80">
                 public/models/{vehicle.id}.glb
@@ -281,12 +281,16 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
               for this vehicle
             </p>
           ) : null}
-          <p>Drag to rotate · Scroll to zoom · Double-click to reset</p>
+          <p className="sm:hidden">Drag to rotate · Pinch to zoom</p>
+          <p className="hidden sm:block">
+            Drag to rotate · Scroll to zoom · Double-click to reset
+          </p>
         </div>
       </div>
 
       <div
-        className="relative h-[420px] sm:h-[520px]"
+        className="relative h-[360px] touch-none overscroll-none sm:h-[520px]"
+        style={{ touchAction: "none" }}
         aria-label={`Interactive 360-degree view of ${vehicle.name}`}
       >
         {!webgl ? (
@@ -323,12 +327,14 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
         {webgl && resolved.status === "ready" ? (
           <Canvas
             shadows
-            dpr={[1, 2]}
+            dpr={[1, 1.75]}
             camera={{ position: [5.5, 2.5, 6.5], fov: 38 }}
             gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+            style={{ touchAction: "none" }}
             onCreated={({ gl }) => {
               gl.outputColorSpace = THREE.SRGBColorSpace;
               gl.toneMappingExposure = 1.05;
+              gl.domElement.style.touchAction = "none";
             }}
           >
             <color attach="background" args={["#101010"]} />
@@ -368,11 +374,16 @@ export default function CarShowroom3D({ vehicle }: CarShowroom3DProps) {
             <OrbitControls
               makeDefault
               enablePan={false}
+              enableDamping
+              dampingFactor={0.08}
+              rotateSpeed={0.85}
               minDistance={3}
               maxDistance={12}
               minPolarAngle={Math.PI / 5}
               maxPolarAngle={Math.PI / 2.05}
               target={[0, 0.3, 0]}
+              // One-finger rotate; two-finger pinch zoom — avoids page-scroll fights with touch-action:none
+              touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
             />
           </Canvas>
         ) : null}

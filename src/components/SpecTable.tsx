@@ -67,38 +67,48 @@ export default function SpecTable({
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-lexus-charcoal shadow-2xl shadow-black/20">
       <div className="border-b border-white/10 p-4 sm:p-5">
-        <div
-          role="tablist"
-          aria-label="Choose a Lexus model"
-          className="flex gap-2 overflow-x-auto pb-1"
-        >
-          {vehicles.map((vehicle, index) => {
-            const isActive = vehicle.id === selectedVehicle.id;
-            return (
-              <button
-                key={vehicle.id}
-                id={`tab-${vehicle.id}`}
-                ref={(node) => {
-                  tabRefs.current[index] = node;
-                }}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-controls="vehicle-specifications"
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => onSelectVehicle(vehicle.id)}
-                onKeyDown={(event) => onTabKeyDown(event, index)}
-                className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-                  isActive
-                    ? "bg-lexus-accent text-white"
-                    : "bg-white/5 text-lexus-silver hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                {vehicle.name.replace("Lexus ", "")}
-              </button>
-            );
-          })}
+        <div className="relative">
+          <div
+            role="tablist"
+            aria-label="Choose a Lexus model"
+            className="flex gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {vehicles.map((vehicle, index) => {
+              const isActive = vehicle.id === selectedVehicle.id;
+              return (
+                <button
+                  key={vehicle.id}
+                  id={`tab-${vehicle.id}`}
+                  ref={(node) => {
+                    tabRefs.current[index] = node;
+                  }}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="vehicle-specifications"
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => onSelectVehicle(vehicle.id)}
+                  onKeyDown={(event) => onTabKeyDown(event, index)}
+                  className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
+                    isActive
+                      ? "bg-lexus-accent text-white"
+                      : "bg-white/5 text-lexus-silver hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {vehicle.name.replace("Lexus ", "")}
+                </button>
+              );
+            })}
+          </div>
+          {/* Scroll affordance: edge fade hints more tabs off-screen on narrow viewports */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-lexus-charcoal to-transparent sm:hidden"
+          />
         </div>
+        <p className="mt-2 text-[11px] text-lexus-silver sm:hidden">
+          Swipe tabs to compare models
+        </p>
       </div>
 
       <div
@@ -106,41 +116,67 @@ export default function SpecTable({
         role="tabpanel"
         aria-labelledby={`tab-${selectedVehicle.id}`}
         tabIndex={0}
-        className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
+        className="min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
       >
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 px-6 py-5 sm:px-8">
-          <div>
+        <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-5 sm:px-8">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lexus-accent-bright">
               {selectedVehicle.bodyStyle}
             </p>
-            <h3 className="mt-1 text-2xl font-bold tracking-tight text-white">
+            <h3 className="mt-1 break-words text-2xl font-bold tracking-tight text-white">
               {selectedVehicle.name}
             </h3>
           </div>
-          <p className="hidden max-w-xs text-right text-sm leading-5 text-lexus-silver sm:block">
+          <p className="hidden max-w-xs shrink-0 text-right text-sm leading-5 text-lexus-silver sm:block">
             {selectedVehicle.tagline}
           </p>
         </div>
-        <table className="w-full border-collapse text-left">
-          <caption className="sr-only">
-            Specifications for {selectedVehicle.name}
-          </caption>
-          <tbody>
-            {SPEC_ROWS.map((row, index) => (
-              <tr key={row.label} className={index % 2 === 0 ? "bg-white/[0.035]" : undefined}>
-                <th
-                  scope="row"
-                  className="w-[46%] px-6 py-4 text-xs font-medium uppercase tracking-[0.12em] text-lexus-silver sm:w-1/3 sm:px-8 sm:text-sm"
+
+        {/* Mobile: stacked cards — no page-level horizontal overflow */}
+        <dl className="divide-y divide-white/10 sm:hidden">
+          {SPEC_ROWS.map((row, index) => (
+            <div
+              key={row.label}
+              className={`flex items-baseline justify-between gap-4 px-4 py-3.5 ${
+                index % 2 === 0 ? "bg-white/[0.035]" : ""
+              }`}
+            >
+              <dt className="shrink-0 text-[11px] font-medium uppercase tracking-[0.12em] text-lexus-silver">
+                {row.label}
+              </dt>
+              <dd className="min-w-0 break-words text-right text-sm font-semibold text-white">
+                {row.getValue(selectedVehicle)}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        {/* sm+: classic table (intentional horizontal scroll if needed) */}
+        <div className="hidden overflow-x-auto overscroll-x-contain sm:block">
+          <table className="w-full min-w-[28rem] border-collapse text-left">
+            <caption className="sr-only">
+              Specifications for {selectedVehicle.name}
+            </caption>
+            <tbody>
+              {SPEC_ROWS.map((row, index) => (
+                <tr
+                  key={row.label}
+                  className={index % 2 === 0 ? "bg-white/[0.035]" : undefined}
                 >
-                  {row.label}
-                </th>
-                <td className="px-6 py-4 text-sm font-semibold text-white sm:px-8 sm:text-base">
-                  {row.getValue(selectedVehicle)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <th
+                    scope="row"
+                    className="w-1/3 px-8 py-4 text-sm font-medium uppercase tracking-[0.12em] text-lexus-silver"
+                  >
+                    {row.label}
+                  </th>
+                  <td className="px-8 py-4 text-base font-semibold text-white">
+                    {row.getValue(selectedVehicle)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
