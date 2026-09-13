@@ -4,8 +4,10 @@ import Hero from "./components/Hero";
 import CarCard from "./components/CarCard";
 import LazyShowroom3D from "./components/LazyShowroom3D";
 import SpecTable from "./components/SpecTable";
+import CompareTable from "./components/CompareTable";
 import Footer from "./components/Footer";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
+import { compareHash, compareIdsFromLocation } from "./compare";
 import {
   applyPageMeta,
   buildPageMeta,
@@ -27,22 +29,28 @@ function App() {
     if (typeof window === "undefined") return vehicles[0].id;
     return vehicleIdFromLocation(window.location, VEHICLE_IDS) ?? vehicles[0].id;
   });
+  const [comparePair, setComparePair] = useState<[string, string]>(() => {
+    if (typeof window === "undefined") return ["es", "nx"];
+    return compareIdsFromLocation(window.location, VEHICLE_IDS) ?? ["es", "nx"];
+  });
   const specsHeadingRef = useRef<HTMLHeadingElement>(null);
   const selectedVehicle =
     vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0];
 
   useEffect(() => {
-    const syncMetaFromLocation = () => {
+    const syncFromLocation = () => {
+      const compare = compareIdsFromLocation(window.location, VEHICLE_IDS);
+      if (compare) setComparePair(compare);
       const fromLocation = vehicleIdFromLocation(window.location, VEHICLE_IDS);
       if (fromLocation) setSelectedVehicleId(fromLocation);
       applyPageMeta(metaForVehicleId(fromLocation));
     };
-    syncMetaFromLocation();
-    window.addEventListener("hashchange", syncMetaFromLocation);
-    window.addEventListener("popstate", syncMetaFromLocation);
+    syncFromLocation();
+    window.addEventListener("hashchange", syncFromLocation);
+    window.addEventListener("popstate", syncFromLocation);
     return () => {
-      window.removeEventListener("hashchange", syncMetaFromLocation);
-      window.removeEventListener("popstate", syncMetaFromLocation);
+      window.removeEventListener("hashchange", syncFromLocation);
+      window.removeEventListener("popstate", syncFromLocation);
     };
   }, []);
 
@@ -69,6 +77,36 @@ function App() {
     selectVehicle(vehicleId);
   };
 
+  const updateCompareHash = (leftId: string, rightId: string) => {
+    const next = `${window.location.pathname}${window.location.search}${compareHash(leftId, rightId)}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (current !== next) {
+      window.history.replaceState(null, "", next);
+    }
+  };
+
+  const handleCompareLeft = (vehicleId: string) => {
+    setComparePair(([, right]) => {
+      const nextRight = vehicleId === right
+        ? (VEHICLE_IDS.find((id) => id !== vehicleId) ?? right)
+        : right;
+      const next: [string, string] = [vehicleId, nextRight];
+      updateCompareHash(next[0], next[1]);
+      return next;
+    });
+  };
+
+  const handleCompareRight = (vehicleId: string) => {
+    setComparePair(([left]) => {
+      const nextLeft = vehicleId === left
+        ? (VEHICLE_IDS.find((id) => id !== vehicleId) ?? left)
+        : left;
+      const next: [string, string] = [nextLeft, vehicleId];
+      updateCompareHash(next[0], next[1]);
+      return next;
+    });
+  };
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <a
@@ -81,7 +119,7 @@ function App() {
       <main id="main-content">
         <Hero
           onExploreModels={() => scrollTo("models")}
-          onCompareSpecs={() => scrollTo("specs")}
+          onCompareSpecs={() => scrollTo("compare")}
         />
 
         <section
@@ -194,6 +232,40 @@ function App() {
             vehicles={vehicles}
             selectedVehicleId={selectedVehicleId}
             onSelectVehicle={handleSelectVehicle}
+          />
+        </section>
+
+        <section
+          id="compare"
+          aria-labelledby="compare-heading"
+          className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
+        >
+          <div className="mb-10 max-w-2xl sm:mb-12">
+            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
+              Side by side
+            </p>
+            <h2
+              id="compare-heading"
+              className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+            >
+              Compare two models
+            </h2>
+            <p className="mt-4 leading-7 text-muted">
+              Pick any two vehicles to align headline specs in one shareable
+              table. Deep-link with{" "}
+              <code className="rounded bg-ink/5 px-1.5 py-0.5 text-sm text-ink">
+                #compare=es,nx
+              </code>
+              .
+            </p>
+          </div>
+
+          <CompareTable
+            vehicles={vehicles}
+            leftId={comparePair[0]}
+            rightId={comparePair[1]}
+            onChangeLeft={handleCompareLeft}
+            onChangeRight={handleCompareRight}
           />
         </section>
       </main>
