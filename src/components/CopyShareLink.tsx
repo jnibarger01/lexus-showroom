@@ -45,7 +45,6 @@ export default function CopyShareLink({
       </Button>
       <p
         id={statusId}
-        role="status"
         aria-live="polite"
         className="min-h-[1.25rem] text-sm text-muted"
         data-testid="copy-share-status"
