@@ -1,0 +1,5 @@
+# GitHub Pages — lexus-showroom
+User-agent: *
+Allow: /lexus-showroom/
+
+Sitemap: https://jnibarger01.github.io/lexus-showroom/sitemap.xml
