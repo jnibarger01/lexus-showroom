@@ -8,6 +8,7 @@ import CompareTable from "./components/CompareTable";
 import LeadForm from "./components/LeadForm";
 import Footer from "./components/Footer";
 import CopyShareLink from "./components/CopyShareLink";
+import ShareQrCard from "./components/ShareQrCard";
 import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
@@ -300,7 +301,10 @@ function App() {
                 materials, real-time shadows, and HDRI image-based lighting.
               </p>
             </div>
-            <CopyShareLink label="Copy link" />
+            <div className="flex flex-col items-start gap-3 sm:items-end">
+              <CopyShareLink label="Copy link" />
+              <ShareQrCard />
+            </div>
           </div>
 
           <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Choose a vehicle for the 3D viewer">
@@ -390,7 +394,10 @@ function App() {
                 .
               </p>
             </div>
-            <CopyShareLink label="Copy compare link" />
+            <div className="flex flex-col items-start gap-3 sm:items-end">
+              <CopyShareLink label="Copy compare link" />
+              <ShareQrCard />
+            </div>
           </div>
 
           <CompareTable
