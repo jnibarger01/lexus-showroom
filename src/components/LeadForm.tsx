@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent } from "react";
+import { useId, useRef, useState, type FormEvent } from "react";
 import Button from "./Button";
 import { vehicles } from "../data/vehicles";
 import {
@@ -14,6 +14,7 @@ const INITIAL: LeadFormValues = {
   name: "",
   email: "",
   modelInterest: "",
+  companyWebsite: "",
 };
 
 export default function LeadForm() {
@@ -30,15 +31,19 @@ export default function LeadForm() {
   const [errors, setErrors] = useState<LeadFieldErrors>({});
   const [status, setStatus] = useState<LeadSubmitStatus>("idle");
   const [statusMessage, setStatusMessage] = useState("");
+  const mountedAtMsRef = useRef(Date.now());
 
   const setField = <K extends keyof LeadFormValues>(key: K, value: LeadFormValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[key];
-        return next;
-      });
+    if (key === "name" || key === "email" || key === "modelInterest") {
+      const field: "name" | "email" | "modelInterest" = key;
+      if (errors[field]) {
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next[field];
+          return next;
+        });
+      }
     }
     if (status === "error" || status === "success") {
       setStatus("idle");
@@ -58,7 +63,7 @@ export default function LeadForm() {
 
     setStatus("submitting");
     setStatusMessage("");
-    const result = await submitLead(values);
+    const result = await submitLead(values, { mountedAtMs: mountedAtMsRef.current });
     setStatus(result.ok ? "success" : "error");
     setStatusMessage(result.message);
     if (result.ok) {
@@ -100,8 +105,26 @@ export default function LeadForm() {
           noValidate
           onSubmit={onSubmit}
           aria-describedby={statusMessage ? statusId : undefined}
-          className="space-y-5"
+          className="relative space-y-5"
         >
+
+          {/* Honeypot: off-screen, not required, ignored by assistive tech */}
+          <div
+            aria-hidden="true"
+            className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"
+          >
+            <label htmlFor={`${formId}-company-website`}>Company website</label>
+            <input
+              id={`${formId}-company-website`}
+              name="companyWebsite"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={values.companyWebsite ?? ""}
+              onChange={(e) => setField("companyWebsite", e.target.value)}
+            />
+          </div>
+
           <div>
             <label htmlFor={nameId} className={labelClass}>
               Name

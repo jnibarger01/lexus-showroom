@@ -126,3 +126,72 @@ describe("submitLead", () => {
     expect(openMailto.mock.calls[0][0]).toMatch(/^mailto:/);
   });
 });
+
+describe("honeypot / timing drop", () => {
+  it("silently succeeds without fetch when honeypot is filled", async () => {
+    const fetchImpl = vi.fn();
+    const result = await submitLead(
+      {
+        name: "Bot",
+        email: "bot@example.com",
+        modelInterest: "es",
+        companyWebsite: "https://spam.test",
+      },
+      { endpoint: "https://formspree.io/f/test", fetchImpl },
+    );
+    expect(result.ok).toBe(true);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("silently succeeds without mailto when honeypot is filled", async () => {
+    const openMailto = vi.fn();
+    const result = await submitLead(
+      {
+        name: "Bot",
+        email: "bot@example.com",
+        modelInterest: "nx",
+        companyWebsite: "x",
+      },
+      { endpoint: "", openMailto },
+    );
+    expect(result.ok).toBe(true);
+    expect(openMailto).not.toHaveBeenCalled();
+  });
+
+  it("drops suspiciously fast submits via timing guard", async () => {
+    const fetchImpl = vi.fn();
+    const result = await submitLead(
+      { name: "Jace", email: "jace@example.com", modelInterest: "rx" },
+      {
+        endpoint: "https://formspree.io/f/test",
+        fetchImpl,
+        mountedAtMs: 1_000,
+        nowMs: 1_200,
+        minSubmitMs: 800,
+      },
+    );
+    expect(result.ok).toBe(true);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("still posts when honeypot empty and dwell is long enough", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({ ok: true });
+    const result = await submitLead(
+      {
+        name: "Jace",
+        email: "jace@example.com",
+        modelInterest: "es",
+        companyWebsite: "",
+      },
+      {
+        endpoint: "https://formspree.io/f/test",
+        fetchImpl,
+        mountedAtMs: 1_000,
+        nowMs: 2_000,
+        minSubmitMs: 800,
+      },
+    );
+    expect(result.ok).toBe(true);
+    expect(fetchImpl).toHaveBeenCalledOnce();
+  });
+});
