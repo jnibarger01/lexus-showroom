@@ -9,6 +9,11 @@ import LeadForm from "./components/LeadForm";
 import Footer from "./components/Footer";
 import CopyShareLink from "./components/CopyShareLink";
 import ShareQrCard from "./components/ShareQrCard";
+import {
+  announceBodyStyleFilter,
+  announceComparePair,
+  announceVehicleSelection,
+} from "./liveAnnounce";
 import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
@@ -59,10 +64,41 @@ function App() {
     if (typeof window === "undefined") return "all";
     return filterFromLocation(window.location) ?? "all";
   });
+
+  const [liveMessage, setLiveMessage] = useState("");
+  /** Stay quiet on first paint; only announce after user/hash-driven changes. */
+  const canAnnounceRef = useRef(false);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      canAnnounceRef.current = true;
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const specsHeadingRef = useRef<HTMLHeadingElement>(null);
   const lineupVehicles = filterVehicles(vehicles, bodyStyleFilter);
   const selectedVehicle =
     vehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? vehicles[0];
+
+  useEffect(() => {
+    if (!canAnnounceRef.current) return;
+    setLiveMessage(announceVehicleSelection(vehicles, selectedVehicleId));
+  }, [selectedVehicleId]);
+
+  useEffect(() => {
+    if (!canAnnounceRef.current) return;
+    setLiveMessage(
+      announceBodyStyleFilter(bodyStyleFilter, lineupVehicles.length),
+    );
+  }, [bodyStyleFilter, lineupVehicles.length]);
+
+  useEffect(() => {
+    if (!canAnnounceRef.current) return;
+    setLiveMessage(
+      announceComparePair(vehicles, comparePair[0], comparePair[1]),
+    );
+  }, [comparePair]);
+
 
   useEffect(() => {
     const focusShowroom = () => {
@@ -215,6 +251,16 @@ function App() {
       </a>
       <Navbar onNavigateHome={goHome} />
       <main id="main-content">
+      <p
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-testid="selection-live-region"
+      >
+        {liveMessage}
+      </p>
+
         <Hero
           onExploreModels={() => scrollTo("models")}
           onCompareSpecs={() => scrollTo("compare")}
