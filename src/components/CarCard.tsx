@@ -1,18 +1,13 @@
 import { useState } from "react";
 import type { Vehicle } from "../data/vehicles";
 import Button from "./Button";
+import { formatUsd } from "../formatUsd";
 
 interface CarCardProps {
   vehicle: Vehicle;
   isSelected: boolean;
   onViewSpecs: (vehicleId: string) => void;
 }
-
-const priceFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
 
 export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardProps) {
   const titleId = `car-card-title-${vehicle.id}`;
@@ -87,7 +82,7 @@ export default function CarCard({ vehicle, isSelected, onViewSpecs }: CarCardPro
               Starting at (MSRP + DPH)
             </p>
             <p className="mt-1 text-lg font-bold text-ink">
-              {priceFormatter.format(vehicle.startingPrice)}
+              {formatUsd(vehicle.startingPrice)}
             </p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-muted">
               Approx. · 2026 MY entry
