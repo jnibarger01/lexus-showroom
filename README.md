@@ -149,6 +149,10 @@ in production; otherwise the mailto fallback is used.
 Helpers live in `src/leadForm.ts` (unit-tested). The UI is `src/components/LeadForm.tsx`.
 
 
+## Crawl / sitemap
+
+`public/robots.txt` and `public/sitemap.xml` list the Pages home and per-model hash URLs (`#es` / `#nx` / `#rx` / `#lx`). Vite copies them into `dist/`; PR CI checks with `npm run test:crawl`.
+
 ## Contributing
 
 New contributors should be able to add a fifth lineup model from this section alone. Open improvement ideas live on GitHub:
