@@ -6,6 +6,11 @@ export interface LeadFormValues {
   name: string;
   email: string;
   modelInterest: string;
+  /**
+   * Honeypot. Must stay empty. Bots that fill it get a fake success without
+   * hitting Formspree/mailto.
+   */
+  companyWebsite?: string;
 }
 
 export type LeadFieldErrors = Partial<
@@ -93,12 +98,52 @@ export interface SubmitLeadResult {
   message: string;
 }
 
+
+/** True when the honeypot is non-empty (trimmed). */
+export function isHoneypotFilled(values: Pick<LeadFormValues, "companyWebsite">): boolean {
+  return (values.companyWebsite ?? "").trim().length > 0;
+}
+
+/**
+ * Soft timing guard: submissions faster than `minMs` after mount are treated
+ * as bots. Injectable `now` keeps tests deterministic.
+ */
+export function isSuspiciouslyFastSubmit(
+  mountedAtMs: number,
+  opts: { nowMs?: number; minMs?: number } = {},
+): boolean {
+  const nowMs = opts.nowMs ?? Date.now();
+  const minMs = opts.minMs ?? 800;
+  return nowMs - mountedAtMs < minMs;
+}
+
+/** Whether this lead should be silently dropped (fake success, no sink). */
+export function shouldDropLead(
+  values: LeadFormValues,
+  opts: { mountedAtMs?: number; nowMs?: number; minMs?: number } = {},
+): boolean {
+  if (isHoneypotFilled(values)) return true;
+  if (opts.mountedAtMs != null) {
+    return isSuspiciouslyFastSubmit(opts.mountedAtMs, {
+      nowMs: opts.nowMs,
+      minMs: opts.minMs,
+    });
+  }
+  return false;
+}
+
 export interface SubmitLeadOptions {
   endpoint?: string;
   /** Injected for tests; defaults to global fetch. */
   fetchImpl?: typeof fetch;
   /** Injected for tests; defaults to assigning window.location.href. */
   openMailto?: (href: string) => void;
+  /** Epoch ms when the form mounted — enables the soft timing guard. */
+  mountedAtMs?: number;
+  /** Injected clock for the timing guard (tests). */
+  nowMs?: number;
+  /** Minimum dwell before a real submit (default 800). */
+  minSubmitMs?: number;
 }
 
 /**
@@ -110,6 +155,25 @@ export async function submitLead(
   options: SubmitLeadOptions = {},
 ): Promise<SubmitLeadResult> {
   const endpoint = (options.endpoint ?? getLeadEndpoint()).trim();
+
+  if (
+    shouldDropLead(values, {
+      mountedAtMs: options.mountedAtMs,
+      nowMs: options.nowMs,
+      minMs: options.minSubmitMs,
+    })
+  ) {
+    const mode = endpoint && isHttpLeadEndpoint(endpoint) ? "endpoint" : "mailto";
+    return {
+      ok: true,
+      mode,
+      message:
+        mode === "endpoint"
+          ? "Thanks — we received your interest and will be in touch."
+          : "Your email app should open with a pre-filled message. Send it to complete your request.",
+    };
+  }
+
   const name = values.name.trim();
   const email = values.email.trim();
   const modelInterest = values.modelInterest.trim().toLowerCase();
