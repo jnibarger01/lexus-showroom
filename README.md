@@ -157,7 +157,7 @@ New contributors should be able to add a fifth lineup model from this section al
 
 ### Prerequisites
 
-- **Node.js 20** (LTS used in CI — see `.github/workflows/pr-ci.yml`). Node 20+ works locally.
+- **Node.js 20+** (`package.json` `engines.node`, `.nvmrc`, and CI in `.github/workflows/pr-ci.yml`).
 - `npm install` once after clone.
 
 ### Scripts
