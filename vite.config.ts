@@ -7,6 +7,13 @@ export default defineConfig({
   base: "/lexus-showroom/",
   test: {
     environment: "jsdom",
+    environmentOptions: {
+      jsdom: {
+        // Without an origin, jsdom leaves window.localStorage undefined.
+        url: "http://localhost/",
+      },
+    },
+    setupFiles: ["./src/test/setup.ts"],
     globals: false,
     css: false,
     include: ["src/**/*.{test,spec}.{ts,tsx}"],

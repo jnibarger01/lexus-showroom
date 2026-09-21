@@ -232,6 +232,8 @@ Unit coverage for the motion helper lives in `src/prefersReducedMotion.test.ts`.
 
 ## Playwright smoke (Pages base path)
 
+PR CI (`.github/workflows/pr-ci.yml`) runs `npm test` (Vitest unit suite, including axe smoke via `src/a11y.test.tsx`) before typecheck, build, Playwright, and Lighthouse.
+
 CI runs a Chromium smoke against the **production preview** served under
 `base: /lexus-showroom/` so a broken Vite base or missing entry JS/CSS fails
 the PR job.
