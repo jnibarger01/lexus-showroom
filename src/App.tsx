@@ -14,6 +14,7 @@ import {
   announceComparePair,
   announceVehicleSelection,
 } from "./liveAnnounce";
+import { prefetchSiblingStills } from "./prefetchSiblingStills";
 import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
@@ -98,6 +99,10 @@ function App() {
       announceComparePair(vehicles, comparePair[0], comparePair[1]),
     );
   }, [comparePair]);
+  useEffect(() => {
+    prefetchSiblingStills(vehicles, selectedVehicleId);
+  }, [selectedVehicleId]);
+
 
 
   useEffect(() => {
