@@ -7,6 +7,7 @@ import SpecTable from "./components/SpecTable";
 import CompareTable from "./components/CompareTable";
 import LeadForm from "./components/LeadForm";
 import Footer from "./components/Footer";
+import CopyShareLink from "./components/CopyShareLink";
 import Button from "./components/Button";
 import { vehicleDataDisclaimer, vehicles } from "./data/vehicles";
 import { compareHash, compareIdsFromLocation } from "./compare";
@@ -247,10 +248,13 @@ function App() {
             </p>
           </div>
 
-          <BodyStyleFilter
-            value={bodyStyleFilter}
-            onChange={handleBodyStyleFilter}
-          />
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <BodyStyleFilter
+              value={bodyStyleFilter}
+              onChange={handleBodyStyleFilter}
+            />
+            <CopyShareLink label="Copy filter link" className="sm:items-end" />
+          </div>
 
           {lineupVehicles.length === 0 ? (
             <p
@@ -279,21 +283,24 @@ function App() {
           aria-labelledby="showroom-heading"
           className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
         >
-          <div className="mb-8 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
-              360 showroom
-            </p>
-            <h2
-              id="showroom-heading"
-              tabIndex={-1}
-              className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
-            >
-              Explore every angle
-            </h2>
-            <p className="mt-4 leading-7 text-muted">
-              The viewer uses Three.js through React Three Fiber, physically based
-              materials, real-time shadows, and HDRI image-based lighting.
-            </p>
+          <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
+                360 showroom
+              </p>
+              <h2
+                id="showroom-heading"
+                tabIndex={-1}
+                className="mt-3 text-3xl font-bold tracking-tight text-ink outline-none sm:text-4xl"
+              >
+                Explore every angle
+              </h2>
+              <p className="mt-4 leading-7 text-muted">
+                The viewer uses Three.js through React Three Fiber, physically based
+                materials, real-time shadows, and HDRI image-based lighting.
+              </p>
+            </div>
+            <CopyShareLink label="Copy link" />
           </div>
 
           <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Choose a vehicle for the 3D viewer">
@@ -363,24 +370,27 @@ function App() {
           aria-labelledby="compare-heading"
           className="mx-auto max-w-6xl px-gutter pb-section sm:pb-section-lg"
         >
-          <div className="mb-10 max-w-2xl sm:mb-12">
-            <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
-              Side by side
-            </p>
-            <h2
-              id="compare-heading"
-              className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
-            >
-              Compare two models
-            </h2>
-            <p className="mt-4 leading-7 text-muted">
-              Pick any two vehicles to align headline specs in one shareable
-              table. Deep-link with{" "}
-              <code className="rounded bg-ink/5 px-1.5 py-0.5 text-sm text-ink">
-                #compare=es,nx
-              </code>
-              .
-            </p>
+          <div className="mb-10 flex flex-col gap-5 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-kicker text-accent-bright sm:text-sm">
+                Side by side
+              </p>
+              <h2
+                id="compare-heading"
+                className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+              >
+                Compare two models
+              </h2>
+              <p className="mt-4 leading-7 text-muted">
+                Pick any two vehicles to align headline specs in one shareable
+                table. Deep-link with{" "}
+                <code className="rounded bg-ink/5 px-1.5 py-0.5 text-sm text-ink">
+                  #compare=es,nx
+                </code>
+                .
+              </p>
+            </div>
+            <CopyShareLink label="Copy compare link" />
           </div>
 
           <CompareTable
