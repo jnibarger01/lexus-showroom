@@ -149,6 +149,10 @@ in production; otherwise the mailto fallback is used.
 Helpers live in `src/leadForm.ts` (unit-tested). The UI is `src/components/LeadForm.tsx`.
 
 
+## Share links
+
+Model, compare, and filter hashes can be copied with **Copy link**. **Show QR** (closed by default) encodes the same absolute URL via `uqr` so a phone can open the Pages deep link without pasting.
+
 ## Crawl / sitemap
 
 `public/robots.txt` and `public/sitemap.xml` list the Pages home and per-model hash URLs (`#es` / `#nx` / `#rx` / `#lx`). Vite copies them into `dist/`; PR CI checks with `npm run test:crawl`.
